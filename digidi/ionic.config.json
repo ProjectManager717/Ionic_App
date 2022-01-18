@@ -1,0 +1,7 @@
+{
+  "name": "Digidi",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}

@@ -1,0 +1,25 @@
+.dash-item-list{
+    display: flex;
+    flex-wrap: wrap;
+    overflow: hidden;
+    ion-col {
+      display: flex;
+      justify-content: center;
+    }
+}
+.dashb-item {
+    border-radius: 20px;
+    min-width: 150px;
+    @media (max-width:320px) {
+        min-width: 125px;
+    }
+    .img-cont{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding-top: 15px;
+        img {
+            width: 100px;
+        }
+    }
+}

@@ -1,0 +1,29 @@
+<ion-card>
+  <ion-card-header>
+    <h3 class="d-flex justify-content-between">
+      <span>Verify OTP</span>
+      <ion-icon color="dark" (click)="close()" name="close" slot="end"></ion-icon>
+    </h3>
+  </ion-card-header>
+  <ion-card-content>
+    <div  class="eth-form">
+      <ion-item lines="none">
+        <ion-label>Verify OTP for <br> <ion-note color="success">{{email}}</ion-note></ion-label>
+      </ion-item>
+      <ion-item>
+        <ion-input type="number" [(ngModel)]="otp" placeholder="OTP" autocomplete="false"></ion-input>
+      </ion-item>
+      <ion-item lines="none">
+        <ion-button class="min-100" slot="start"  [disabled]="codeSent || sendingCode || verifyingOTP" (click)="resendOTP()">
+          <ng-container *ngIf="codeSent">
+            Resend <span class="timesp">&nbsp;{{ timeLeft }}s</span>
+          </ng-container>
+          <ng-container *ngIf="!codeSent"> Resend <ion-spinner *ngIf="sendingCode"></ion-spinner>
+          </ng-container>
+        </ion-button>
+        <ion-button class="min-100" slot="end" color="success"  [disabled]="sendingCode || !codeSent || verifyingOTP" (click)="verifyOTP()">
+          Verify</ion-button>
+      </ion-item>
+    </div>
+  </ion-card-content>
+</ion-card>

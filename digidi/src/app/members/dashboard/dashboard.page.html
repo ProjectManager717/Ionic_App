@@ -1,0 +1,18 @@
+<ion-header [class.not-scrolled]="!fixHeader">
+  <ion-toolbar translucent>
+    <ion-title>Dashboard</ion-title>
+    <ion-buttons slot="end">
+      <ion-button icon-only (click)="exitApp()">
+        <ion-icon name="power"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content fullscreen [scrollEvents]="true" (ionScroll)="logScrolling($event)" [class.scrolled]="fixHeader"> 
+  <div class="header-bg"></div>
+  <div class="content-bg">
+    <div  class="dash-item-list">
+    </div>
+  </div>
+</ion-content>
