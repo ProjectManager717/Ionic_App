@@ -33,8 +33,8 @@ ion-header{
         background-image: none!important;
     }
     ion-toolbar {
-        --background: var(--digidi-app-header-bg);
-        --ion-toolbar-background-color: var(--digidi-app-header-bg);
+        --background: #fff; //var(--digidi-app-header-bg);
+        --ion-toolbar-background-color: #fff;//var(--digidi-app-header-bg);
         --border-width: 0!important;
         --color: var(--digidi-app-tool-color);
         &.seg-div{

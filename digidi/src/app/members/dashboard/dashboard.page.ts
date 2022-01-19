@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { NavController } from '@ionic/angular';
 import { element } from 'protractor';
@@ -11,26 +12,82 @@ import { AuthenticationService } from 'src/app/_helpers/auth/authentication.serv
   styleUrls: ['./dashboard.page.scss'],
 })
 export class DashboardPage implements OnInit {
-  dashItems: DashItem[] = []
+  prifleItems: ProfileItems[] = []
   fixHeader: boolean;
+  accountForm: FormGroup;
   constructor(
     private authService: AuthenticationService,
-    private navCtrl: NavController
+    private navCtrl: NavController,
+    private fb: FormBuilder,
   ) { 
-    if(!this.authService.currentUserValue) {
-      this.exitApp();
-    }
+    // if(!this.authService.currentUserValue) {
+    //   this.exitApp();
+    // }
+
+    this.prifleItems = [
+      { name: 'Profile1', icon: 'assets/img/profile-img.png', subscribers: 0, dkk: 0, total_dkk:0 },
+      { name: 'Profile2', icon: 'assets/img/profile-img.png', subscribers: 0, dkk: 0, total_dkk:0 },
+      { name: 'Profile3', icon: 'assets/img/profile-img.png', subscribers: 0, dkk: 0, total_dkk:0 },
+      { name: 'Profile4', icon: 'assets/img/profile-img.png', subscribers: 0, dkk: 0, total_dkk:0 },
+    ]
+    this.initForm();
+    this.updateCompanyFields();
   }
 
+  updateCompanyFields() {
+    let toEnable = this.accountForm.get('representCompany').value;
+    if(!toEnable) {
+      this.accountForm.get('companyName').enable();
+      this.accountForm.get('companyRegNo').enable();
+      this.accountForm.get('companyAddress').enable();
+      this.accountForm.get('companyPhone').enable();
+      this.accountForm.get('companyZipcode').enable();
+      this.accountForm.get('companyCountry').enable();
+    } else {
+      this.accountForm.get('companyName').disable();
+      this.accountForm.get('companyRegNo').disable();
+      this.accountForm.get('companyAddress').disable();
+      this.accountForm.get('companyPhone').disable();
+      this.accountForm.get('companyZipcode').disable();
+      this.accountForm.get('companyCountry').disable();
+    }
+  }
+  initForm() {
+    this.accountForm = this.fb.group(
+      {
+        firstName: ['', [Validators.required]],
+        lastName: ['', [Validators.required]],
+        email: ['', [Validators.required, Validators.email]],
+        password: [''],
+        addressLine1: [''],
+        addressLine2: [''],
+        author: [''],
+        phone: [''],
+        country: [''],
+        zipcode: [''],
+        city: [''],
+        bankAccount: [],
+        representCompany: [null],
+        companyName: ['', [Validators.required] ],
+        companyRegNo: ['', [Validators.required] ],
+        companyAddress: ['', [Validators.required] ],
+        companyPhone: ['', [Validators.required] ],
+        companyZipcode: ['', [Validators.required] ],
+        companyCountry: ['', [Validators.required] ],
+      }
+    )
+  }
+
+  get accFrm () {
+    return this.accountForm.controls
+  }
   ngOnInit() {
   }
 
-  navigaterNow(item:DashItem) {
+  navigaterNow(item:ProfileItems) {
     if(item) {
       if(item.route){
-        this.navCtrl.navigateForward(item.route);
-      } else if(item.click) {
-        item.click(); 
+        // this.navCtrl.navigateForward(item.route);
       }
     }
   }
@@ -46,6 +103,6 @@ export class DashboardPage implements OnInit {
 }
 
 
-export class DashItem {
-  title: string; icon: string; route?:string; click?:any;
+export class ProfileItems {
+  name: string; icon: string; route?:string;  subscribers?:any; dkk?:any; total_dkk?:any;
 }

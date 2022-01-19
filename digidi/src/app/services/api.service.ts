@@ -26,7 +26,8 @@ export class ApiService {
   }
 
   loginUser(body): Observable<any> {
-    return this._httpClient.post(`${environment.baseApiUrl}login`,body);
+    let  credentials = {body}
+    return this._httpClient.post(`${environment.baseApiUrl}login`,{credentials});
   }
 
   forgotPassword(body): Observable<any> {

@@ -23,3 +23,19 @@
         }
     }
 }
+
+
+.account-cards form ion-item{
+    border: 1px solid;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    &.no-border{
+        border: none;
+    }
+    &.has-error {
+        border-color:red;
+        ion-label{
+            --color: red;
+        }
+    }
+}
