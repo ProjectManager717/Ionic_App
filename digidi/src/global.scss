@@ -26,7 +26,9 @@
 @import "~@ionic/angular/css/flex-utils.css";
 
 
-
+body {
+    --ion-font-family: 'Raleway', sans-serif;
+}
 // custom css
 ion-header{
     &::after {
@@ -207,4 +209,27 @@ p.signUp {
     &.justify-content-between{
         justify-content: space-between;
     }
+}
+
+.form ion-item{
+    border: 1px solid;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    &.no-border{
+        border: none;
+    }
+    &.mr-0{
+        margin-bottom: 0;
+    }
+    &.has-error {
+        border-color:red;
+        ion-label{
+            --color: red;
+        }
+    }
+}
+
+
+button.item-native {
+    z-index: 0!important;
 }

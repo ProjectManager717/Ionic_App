@@ -1,21 +1,31 @@
-export class Order {
-  id?: number;
-  user_id?:any;
-  facility_name?:string = '';
-  address?:string = ''
-  time_arrived?:any;
-  time_departed?:any;
-  service_requested?:SERVICE_TYPE;
-  service_call_detail?:string = '';
-  service_performed?:string ='';
-  parts_used?:any[]=[];
-  createdAt?:any;
+export class Post {
+    author_alias?: string;
+    content?: string;
+    customization?: Customization;
+    file?: FileItem;
+    media?: FileItem;
+    status?: 'HIDDEN' | 'PUBLISHED';
+    publish_date?: any;
+    title: string;
+    notify_followers?: boolean;
+    sticky?:boolean;
+    maecenate?:string;
 }
 
-export enum SERVICE_TYPE  { 
-    "AQMD R461 Testing" = 1,
-    "Monitoring System Certification" = 2,
-    "SB989 Secondary Containment Testing" = 3,
-    "Overfill Prevention Inspection" = 4,
-    "Service Call" = 5,
+export class Customization {
+    bg_color?: string;
+    font?: string;
+    font_color?: string;
+}
+
+export class FileItem {
+  file_type?: string;
+  filename?: string;
+  id?: string;
+  img_height?: number;
+  img_width?: number;
+  local_path?: string;
+  props?: any;
+  role?: "FILE" | "MEDIA"
+  type?: string;
 }

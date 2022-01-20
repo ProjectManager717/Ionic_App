@@ -1,0 +1,121 @@
+<ion-header [class.not-scrolled]="!fixHeader">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/member/dashboard"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Create Post</ion-title>
+    <ion-buttons slot="end">
+      <ion-button icon-only (click)="exitApp()">
+        <ion-icon name="power"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content fullscreen [scrollEvents]="true" (ionScroll)="logScrolling($event)" [class.scrolled]="fixHeader"> 
+  <div class="create-post">
+    <ion-card class="account-cards">
+      <ion-card-header>
+        <ion-card-title>Create Post</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <form class="form" [formGroup]="postForm">
+          <ion-list lines="none">
+            <ion-item class="pst-itm" [ngClass]="{'has-error': accFrm.title.invalid && accFrm.title.dirty}">
+              <ion-label>Title*</ion-label>
+              <ion-input formControlName="title" type="text" ></ion-input>
+            </ion-item>
+
+
+            <div class="top-mr">
+              <ion-item class="no-border no-sp" (click)="toggleAppear()">
+                <ion-label>Customize your post appearance</ion-label>
+                <ion-icon name="{{!showApperance ? 'chevron-down' : 'chevron-up'}}"></ion-icon>
+              </ion-item>
+              <div *ngIf="showApperance">
+                <ion-item class="pst-itm">
+                  <ion-label>Font</ion-label>
+                  <ion-select formControlName="font">
+                    <ion-select-option *ngFor="let fnt of fonts" value="{{fnt.title}}">{{fnt.value}}</ion-select-option>
+                  </ion-select>
+                </ion-item>
+
+                <ion-item>
+                  <ion-label>Font Color</ion-label>
+                  <input class="inp-color" (cpInputChange)="colorChanged($event,'font')" (cpToggleChange)="colorChanged($event,'font')" [(colorPicker)]="color" [style.background]="color"/>
+                </ion-item>
+
+                <ion-item>
+                  <ion-label>Background Color</ion-label>
+                  <input class="inp-color" (cpInputChange)="colorChanged($event,'bg')" (cpToggleChange)="colorChanged($event,'bg')" [(colorPicker)]="bgColor" [style.background]="bgColor"/>
+                </ion-item>
+              </div>
+            </div>
+
+            <ion-item class="pst-itm" [ngClass]="{'has-error': accFrm.author_alias.invalid && accFrm.author_alias.dirty}">
+              <ion-label>Author</ion-label>
+              <ion-input formControlName="author_alias" type="text" ></ion-input>
+            </ion-item>
+
+
+            <!-- date -->
+            <div class="top-mr">
+              <div class="lb">Publish</div>
+              <ion-item class="pst-itm" [disabled]="true">
+                <ion-label>Created</ion-label>
+                <ion-text slot="end">{{ accFrm.created_date.value | date : 'MMMM dd, yyyy | hh:mm ' }}</ion-text>
+              </ion-item>
+              <ion-item class="pst-itm" id="open-date-input">
+                <ion-label>Publish</ion-label>
+                <ion-text slot="end">{{ accFrm.publish_date.value | date : 'MMMM dd, yyyy | hh:mm ' }}</ion-text>
+                <ion-popover class="dateTime-pop" trigger="open-date-input" show-backdrop="false">
+                  <ng-template>
+                    <ion-datetime
+                      #popoverDatetime
+                      (ionChange)="formatDate(popoverDatetime.value)"
+                    ></ion-datetime>
+                  </ng-template>
+                </ion-popover>
+              </ion-item>
+            </div>
+            
+
+            <!-- Who can view this post  -->
+            <div class="top-mr">
+              <ion-radio-group formControlName="status" (change)="visiblity()">
+                <div>Who can view this post?</div>
+                <div class="flex-d">
+                  <ion-item class="pst-itm no-border mr-0">
+                    <ion-label>Only My Fans</ion-label>
+                    <ion-radio slot="start" value="PUBLISHED"></ion-radio>
+                  </ion-item>
+      
+                  <ion-item class="pst-itm no-border mr-0">
+                    <ion-label>Keep as Draft</ion-label>
+                    <ion-radio slot="start" value="HIDDEN"></ion-radio>
+                  </ion-item>
+                </div>
+              </ion-radio-group>
+            </div>
+
+
+            <div class="br-top">
+              <ion-item  class="pst-itm no-border mr-0" *ngIf="accFrm.status.value == 'PUBLISHED'">
+                <ion-label>Notify my Fans</ion-label>
+                <ion-checkbox slot="start" formControlName="notify_followers"></ion-checkbox>
+              </ion-item>
+              <ion-item  class="pst-itm no-border mr-0">
+                <ion-label>Pin this post</ion-label>
+                <ion-checkbox slot="start" formControlName="sticky"></ion-checkbox>
+              </ion-item>
+            </div>
+
+            
+
+          </ion-list>
+        </form>
+        <ion-button (click)="creatPost()">Create Post</ion-button>
+      </ion-card-content>
+    </ion-card>
+  </div>
+</ion-content>

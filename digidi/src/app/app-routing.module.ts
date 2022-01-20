@@ -15,6 +15,10 @@ const routes: Routes = [
     redirectTo: 'member',
     pathMatch: 'full'
   },
+  {
+    path: 'create-post',
+    loadChildren: () => import('./members/create-post/create-post.module').then( m => m.CreatePostPageModule)
+  },
 ];
 
 @NgModule({

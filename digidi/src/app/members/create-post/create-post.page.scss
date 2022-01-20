@@ -1,0 +1,24 @@
+.dateTime-pop{
+    --width:unset;
+}
+
+.br-top {
+    border-top: 1px solid;
+    margin-top: 20px;
+    padding-top: 10px;
+    margin-bottom: 10px;
+}
+
+.top-mr{
+    margin-top: 15px;
+}
+.lb{
+    padding-bottom: 5px;
+}
+.no-sp {
+  --padding-start: 0;
+}
+ion-item.pst-itm {
+    position: relative;
+    z-index: 0;
+}

@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { NavController } from '@ionic/angular';
 import { element } from 'protractor';
+import { ApiService } from 'src/app/services/api.service';
 import { AuthenticationService } from 'src/app/_helpers/auth/authentication.service';
 // import { App } from '@capacitor/app';
 
@@ -19,17 +20,13 @@ export class DashboardPage implements OnInit {
     private authService: AuthenticationService,
     private navCtrl: NavController,
     private fb: FormBuilder,
+    private apiService: ApiService
   ) { 
     // if(!this.authService.currentUserValue) {
     //   this.exitApp();
     // }
 
-    this.prifleItems = [
-      { name: 'Profile1', icon: 'assets/img/profile-img.png', subscribers: 0, dkk: 0, total_dkk:0 },
-      { name: 'Profile2', icon: 'assets/img/profile-img.png', subscribers: 0, dkk: 0, total_dkk:0 },
-      { name: 'Profile3', icon: 'assets/img/profile-img.png', subscribers: 0, dkk: 0, total_dkk:0 },
-      { name: 'Profile4', icon: 'assets/img/profile-img.png', subscribers: 0, dkk: 0, total_dkk:0 },
-    ]
+    this.prifleItems = this.apiService.postItems;
     this.initForm();
     this.updateCompanyFields();
   }
@@ -92,6 +89,10 @@ export class DashboardPage implements OnInit {
     }
   }
 
+  gotoPost() {
+    this.navCtrl.navigateForward('/create-post');
+  }
+  
   exitApp() {
     this.authService.logout();
   }

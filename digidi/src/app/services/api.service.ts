@@ -3,17 +3,25 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { EncryptionService } from '../_helpers/encryption/encryption.service';
+import { Post } from '../_helpers/models/order';
 import { ToastService } from '../_helpers/toast-service/toast.service';
 
 @Injectable({ providedIn: 'root' })
 export class ApiService {
+  public postItems = [
+    { name: 'Profile1', id:'cf94d7a0-78fd-11ec-8f6d-49f8a47e0f45', icon: 'assets/img/profile-img.png', subscribers: 0, dkk: 0, total_dkk:0 },
+    { name: 'Profile2', id:'cf94d7a0-78fd-11ec-8f6d-49f8a47e0f46', icon: 'assets/img/profile-img.png', subscribers: 0, dkk: 0, total_dkk:0 },
+    { name: 'Profile3', id:'cf94d7a0-78fd-11ec-8f6d-49f8a47e0f43', icon: 'assets/img/profile-img.png', subscribers: 0, dkk: 0, total_dkk:0 },
+    { name: 'Profile4', id:'cf94d7a0-78fd-11ec-8f6d-49f8a47e0f42', icon: 'assets/img/profile-img.png', subscribers: 0, dkk: 0, total_dkk:0 },
+  ]
 
-
-  /**
+  /*
    * Constructor
    *
    * @param {HttpClient} _httpClient
    */
+
+  
   constructor(
     private _httpClient: HttpClient,
     private encryptionService: EncryptionService,
@@ -36,6 +44,17 @@ export class ApiService {
 
   resetPassword(body): Observable<any> {
     return this._httpClient.post(`${environment.baseApiUrl}resetPassword`,body);
+  }
+
+  post(body: Post) {
+    return this._httpClient.post(`${environment.baseApiUrl}posts/create`,body);
+  }
+
+  uploadChunks(role:'MEDIA' | 'FILE' ='MEDIA', body) {
+    // body: { dzuuid: 1e72d07e-b200-4f5b-925d-eedbb29f5c3d dzchunkindex: 0 dztotalfilesize: 121036
+    // dzchunksize: 5000000, dztotalchunkcount: 1, dzchunkbyteoffset: 0, file: (binary) }
+    // {"entities":{"media":{"d13d8a10-79b7-11ec-8f6d-49f8a47e0d44":{"id":"d13d8a10-79b7-11ec-8f6d-49f8a47e0d44","type":"image/png","role":"MEDIA","filename":"image_2022_01_18T15_08_20_302Z.png","local_path":"image/6f/fcc7ce60cff2eebca937a98cde9cdc.png","file_type":"image","props":{},"img_width":512,"img_height":512}}},"result":["d13d8a10-79b7-11ec-8f6d-49f8a47e0d44"]}
+    return this._httpClient.post(`${environment.baseApiUrl}files/upload-by-chunk?role=${role}`,body);
   }
   
   socialMediaLogin(body): Observable<any> {

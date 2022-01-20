@@ -6,6 +6,9 @@ const routes: Routes = [
   { path: 'dashboard', 
     loadChildren: () => import('./dashboard/dashboard.module').then( m => m.DashboardPageModule) 
   },
+  { path: 'create-post', 
+    loadChildren: () => import('./create-post/create-post.module').then( m => m.CreatePostPageModule) 
+  },
   {
     path: '',
     redirectTo: 'dashboard',
