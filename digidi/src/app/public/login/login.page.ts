@@ -59,14 +59,20 @@ export class LoginPage implements OnInit {
     this.logging = true;
       this.apiService.loginUser(this.loginForm.value).subscribe(
         res => {
-          if(!res.error) {
-            this.authService.setLogin(res.body);
-            this.navCtrl.navigateRoot(['/','member'])
+          if(res.token && res.result && res.result.length > 0) {
+            try{
+              let user = res.entities.users[res.result[0]];
+              user.token = res.token;
+              this.authService.setLogin(user);
+              this.navCtrl.navigateRoot(['/','member'])
+            } catch(error) {
+              this.toastr.presentToast('Oops! something went wrong while login, please try again later.', 'danger');
+            }
           } else {
             this.toastr.presentToast(res.msg, 'danger');
-            if(res.toVerify) {
-              this.toVerify = true;
-            }
+            // if(res.toVerify) {
+            //   this.toVerify = true;
+            // }
           }
           this.logging = false;
         }, error => {

@@ -34,8 +34,8 @@ export class ApiService {
   }
 
   loginUser(body): Observable<any> {
-    let  credentials = {body}
-    return this._httpClient.post(`${environment.baseApiUrl}login`,{credentials});
+    let  credentials = body
+    return this._httpClient.post(`${environment.baseApiUrl}users/auth`,{credentials});
   }
 
   forgotPassword(body): Observable<any> {
@@ -54,7 +54,7 @@ export class ApiService {
     // body: { dzuuid: 1e72d07e-b200-4f5b-925d-eedbb29f5c3d dzchunkindex: 0 dztotalfilesize: 121036
     // dzchunksize: 5000000, dztotalchunkcount: 1, dzchunkbyteoffset: 0, file: (binary) }
     // {"entities":{"media":{"d13d8a10-79b7-11ec-8f6d-49f8a47e0d44":{"id":"d13d8a10-79b7-11ec-8f6d-49f8a47e0d44","type":"image/png","role":"MEDIA","filename":"image_2022_01_18T15_08_20_302Z.png","local_path":"image/6f/fcc7ce60cff2eebca937a98cde9cdc.png","file_type":"image","props":{},"img_width":512,"img_height":512}}},"result":["d13d8a10-79b7-11ec-8f6d-49f8a47e0d44"]}
-    return this._httpClient.post(`${environment.baseApiUrl}files/upload-by-chunk?role=${role}`,body);
+    return this._httpClient.post(`${environment.baseApiUrl}files/upload-by-chunk?role=${role}`,body, { reportProgress: true});
   }
   
   socialMediaLogin(body): Observable<any> {

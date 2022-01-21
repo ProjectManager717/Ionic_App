@@ -10,6 +10,7 @@ import { CreatePostPage } from './create-post.page';
 import { ComponentsModule } from 'src/app/components/components.module';
 import { PipesModule } from 'src/app/pipes/pipes.module';
 import { ColorPickerModule } from 'ngx-color-picker';
+import { QuillModule } from 'ngx-quill'
 
 @NgModule({
   imports: [
@@ -20,7 +21,17 @@ import { ColorPickerModule } from 'ngx-color-picker';
     PipesModule,
     ComponentsModule,
     CreatePostPageRoutingModule,
-    ColorPickerModule
+    ColorPickerModule,
+    QuillModule.forRoot(
+      {
+        modules: {
+          syntax: true,
+          toolbar: [
+            ['bold', 'italic', 'underline', 'strike'], 
+          ]
+        }
+      }
+    )
   ],
   declarations: [CreatePostPage]
 })

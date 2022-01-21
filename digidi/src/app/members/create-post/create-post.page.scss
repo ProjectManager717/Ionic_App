@@ -22,3 +22,33 @@ ion-item.pst-itm {
     position: relative;
     z-index: 0;
 }
+
+.imgs-pfr {
+    padding: 10px 0;
+    .imgss {
+        display: flex;
+        padding: 5px 5px 5px 0px;
+    }
+}
+
+.upload-area-item {
+    padding: 10px 0;
+    width: 100%;
+    .up-area {
+        width: 100%;
+        height: 100px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        span {
+            color: var(--ion-color-primary);
+        }
+    }
+    input.hideinpt {
+        display: none;
+    }
+}
+
+.quill-wrapper-div {
+    margin: 15px 0;
+}

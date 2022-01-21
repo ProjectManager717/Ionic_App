@@ -21,11 +21,40 @@
       <ion-card-content>
         <form class="form" [formGroup]="postForm">
           <ion-list lines="none">
+
+            <ion-item class="pst-itm" [ngClass]="{'has-error': accFrm.maecenate.invalid && accFrm.maecenate.dirty}">
+              <div class="imgs-pfr">
+                <ion-label>Select Profile*</ion-label>
+                <div class="imgss">
+                  <ion-avatar slot="start" *ngFor="let prf of profileItems">
+                    <img src="{{prf.icon}}" />
+                  </ion-avatar>
+                </div>
+              </div>
+            </ion-item>
+
             <ion-item class="pst-itm" [ngClass]="{'has-error': accFrm.title.invalid && accFrm.title.dirty}">
               <ion-label>Title*</ion-label>
               <ion-input formControlName="title" type="text" ></ion-input>
             </ion-item>
 
+            <div class="quill-wrapper-div">
+              <quill-editor formControlName="content" placeholder="Content" [styles]="{height: '150px'}">
+                <div quill-editor-toolbar>
+                  <span class="ql-formats">
+                    <button class="ql-bold" [title]="'Bold'"></button>
+                    <button class="ql-underline" [title]="'Underline'"></button>
+                    <button class="ql-italic" [title]="'Italic'"></button>
+                    <select class="ql-align" [title]="'Aligment'">
+                      <option selected></option>
+                      <option value="center"></option>
+                      <option value="right"></option>
+                      <option value="justify"></option>
+                    </select>
+                  </span>
+                </div>
+              </quill-editor>
+            </div>
 
             <div class="top-mr">
               <ion-item class="no-border no-sp" (click)="toggleAppear()">
@@ -36,7 +65,7 @@
                 <ion-item class="pst-itm">
                   <ion-label>Font</ion-label>
                   <ion-select formControlName="font">
-                    <ion-select-option *ngFor="let fnt of fonts" value="{{fnt.title}}">{{fnt.value}}</ion-select-option>
+                    <ion-select-option *ngFor="let fnt of fontlist" value="{{fnt.value}}">{{fnt.title}}</ion-select-option>
                   </ion-select>
                 </ion-item>
 
@@ -51,6 +80,32 @@
                 </ion-item>
               </div>
             </div>
+
+            <ion-item class="pst-itm upload-area">
+              <div class="upload-area-item">
+                <ion-label>Media<br></ion-label>
+                <div class="up-area" (click)="!uploadingMedia ? mediaFile.click() : ''">
+                  <span>Upload Media</span>
+                </div>
+                <p class="sel-img">
+                  <ion-progress-bar></ion-progress-bar>
+                </p>
+                <input class="hideinpt" type="file" #mediaFile (change)="uploadMedia($event)">
+              </div>
+            </ion-item>
+            <ion-item class="pst-itm upload-area">
+              <div class="upload-area-item">
+                <ion-label>Attachment<br></ion-label>
+                <div class="up-area" (click)="attachFile.click()">
+                  <span>Upload Attachment</span>
+                </div>
+                <p class="sel-img">
+                  <ion-progress-bar></ion-progress-bar>
+                </p>
+                <input class="hideinpt" type="file" #attachFile (change)="!uploadingAttachment ? uploadAttachment($event) : ''">
+              </div>
+            </ion-item>
+
 
             <ion-item class="pst-itm" [ngClass]="{'has-error': accFrm.author_alias.invalid && accFrm.author_alias.dirty}">
               <ion-label>Author</ion-label>
