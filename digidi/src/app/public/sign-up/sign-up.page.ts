@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NavController } from '@ionic/angular';
 import { ApiService } from 'src/app/services/api.service';
 import { AuthenticationService } from 'src/app/_helpers/auth/authentication.service';
+import { User } from 'src/app/_helpers/models';
 import { ToastService } from 'src/app/_helpers/toast-service/toast.service';
 
 @Component({
@@ -37,8 +38,8 @@ export class SignUpPage implements OnInit {
 
   initForm() {
     this.signUpForm = this.formBuilder.group({
-      firstname: ['', Validators.compose([Validators.required])],
-      lastname: ['', Validators.compose([Validators.required])],
+      first_name: ['', Validators.compose([Validators.required])],
+      last_name: ['', Validators.compose([Validators.required])],
       email: ['', Validators.compose([Validators.required, Validators.email])],
       password: ['', Validators.compose([Validators.required])],
       confirmPassword :  ['', Validators.compose([Validators.required])],
@@ -66,7 +67,11 @@ export class SignUpPage implements OnInit {
     this.signingUp = true;
     this.apiService.signUpUser(data).subscribe(
       res => {
-        if(!res.error) {
+        if(res.result && res.result.length > 0) {
+          // uncomment if need to login after signup
+          // let user:User = res.entities.users[res.result[0]];
+          // user.token = res.token;
+          // this.authService.setLogin(user);
           this.toastr.presentToast(res.msg, 'success');
           this.toVerify = true;
         } else {

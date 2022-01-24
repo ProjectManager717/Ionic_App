@@ -6,6 +6,7 @@ export class Post {
     media?: FileItem;
     status?: 'HIDDEN' | 'PUBLISHED';
     publish_date?: any;
+    created_date?: any;
     title: string;
     notify_followers?: boolean;
     sticky?:boolean;

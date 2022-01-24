@@ -36,12 +36,15 @@ ion-item.pst-itm {
     width: 100%;
     .up-area {
         width: 100%;
-        height: 100px;
+        height: 120px;
         display: flex;
         justify-content: center;
         align-items: center;
         span {
             color: var(--ion-color-primary);
+        }
+        img {
+            height: 100px;
         }
     }
     input.hideinpt {

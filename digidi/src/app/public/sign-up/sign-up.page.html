@@ -16,11 +16,11 @@
       </ion-card-header>
       <ion-card-content>
         <form [formGroup]="signUpForm" class="eth-form">
-          <ion-item [ngClass]="{'has-error': signUp.firstname.invalid && signUp.firstname.dirty}">
-            <ion-input type="text" formControlName="firstname"  placeholder="Firstname" autocomplete="false"></ion-input>
+          <ion-item [ngClass]="{'has-error': signUp.first_name.invalid && signUp.first_name.dirty}">
+            <ion-input type="text" formControlName="first_name"  placeholder="Firstname" autocomplete="false"></ion-input>
           </ion-item>
-          <ion-item [ngClass]="{'has-error': signUp.lastname.invalid && signUp.lastname.dirty}">
-            <ion-input type="text" formControlName="lastname"  placeholder="Lastname" autocomplete="false"></ion-input>
+          <ion-item [ngClass]="{'has-error': signUp.last_name.invalid && signUp.last_name.dirty}">
+            <ion-input type="text" formControlName="last_name"  placeholder="Lastname" autocomplete="false"></ion-input>
           </ion-item>
           <ion-item [ngClass]="{'has-error': signUp.email.invalid && signUp.email.dirty}">
             <ion-input type="text" formControlName="email"  placeholder="Email" autocomplete="false"></ion-input>

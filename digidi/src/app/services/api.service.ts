@@ -1,10 +1,11 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpEvent } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { EncryptionService } from '../_helpers/encryption/encryption.service';
 import { Post } from '../_helpers/models/order';
 import { ToastService } from '../_helpers/toast-service/toast.service';
+import { StaticService } from './static.service';
 
 @Injectable({ providedIn: 'root' })
 export class ApiService {
@@ -14,6 +15,8 @@ export class ApiService {
     { name: 'Profile3', id:'cf94d7a0-78fd-11ec-8f6d-49f8a47e0f43', icon: 'assets/img/profile-img.png', subscribers: 0, dkk: 0, total_dkk:0 },
     { name: 'Profile4', id:'cf94d7a0-78fd-11ec-8f6d-49f8a47e0f42', icon: 'assets/img/profile-img.png', subscribers: 0, dkk: 0, total_dkk:0 },
   ]
+
+  posttoEdit:any = null;
 
   /*
    * Constructor
@@ -26,14 +29,28 @@ export class ApiService {
     private _httpClient: HttpClient,
     private encryptionService: EncryptionService,
     private toastr: ToastService,
+    private staticService: StaticService
   ) {
   }
 
+  myDetails():Observable<any> {
+    return of(this.staticService.updateUser);
+    return this._httpClient.get(`${environment.baseApiUrl}users/me`);
+  }
+
   signUpUser(body): Observable<any> {
+    // return of(this.staticService.demoRegister);
     return this._httpClient.post(`${environment.baseApiUrl}signUp`,body);
   }
 
+  updateDetails(body):Observable<any> {
+    return of(this.staticService.updateUser);
+    return this._httpClient.put(`${environment.baseApiUrl}api/users/me/edit`, body);
+  }
+
+
   loginUser(body): Observable<any> {
+    return of(this.staticService.demoUser);
     let  credentials = body
     return this._httpClient.post(`${environment.baseApiUrl}users/auth`,{credentials});
   }
@@ -46,11 +63,15 @@ export class ApiService {
     return this._httpClient.post(`${environment.baseApiUrl}resetPassword`,body);
   }
 
+  getPost(page): Observable<any> {
+    return of(this.staticService.posts);
+    return this._httpClient.get(`${environment.baseApiUrl}maecenates/coolguy/posts?page=${page}`)
+  }
   post(body: Post) {
     return this._httpClient.post(`${environment.baseApiUrl}posts/create`,body);
   }
 
-  uploadChunks(role:'MEDIA' | 'FILE' ='MEDIA', body) {
+  uploadChunks(role:'MEDIA' | 'FILE' ='MEDIA', body): Observable<any> {
     // body: { dzuuid: 1e72d07e-b200-4f5b-925d-eedbb29f5c3d dzchunkindex: 0 dztotalfilesize: 121036
     // dzchunksize: 5000000, dztotalchunkcount: 1, dzchunkbyteoffset: 0, file: (binary) }
     // {"entities":{"media":{"d13d8a10-79b7-11ec-8f6d-49f8a47e0d44":{"id":"d13d8a10-79b7-11ec-8f6d-49f8a47e0d44","type":"image/png","role":"MEDIA","filename":"image_2022_01_18T15_08_20_302Z.png","local_path":"image/6f/fcc7ce60cff2eebca937a98cde9cdc.png","file_type":"image","props":{},"img_width":512,"img_height":512}}},"result":["d13d8a10-79b7-11ec-8f6d-49f8a47e0d44"]}
@@ -120,5 +141,14 @@ export class ApiService {
         this.toastr.presentToast(text, 'primary');
        break;
     }
+  }
+
+  markAllDirty(form:any) {
+    for (const key in form.controls) {
+      if (Object.prototype.hasOwnProperty.call(form.controls, key)) {
+        form.controls[key].markAsDirty(); 
+      }
+    }
+    return form;
   }
 }

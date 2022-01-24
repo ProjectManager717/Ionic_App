@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
 import { NavController } from '@ionic/angular';
 import { ApiService } from 'src/app/services/api.service';
 import { AuthenticationService } from 'src/app/_helpers/auth/authentication.service';
+import { Post } from 'src/app/_helpers/models/order';
 
 @Component({
   selector: 'app-create-post',
@@ -11,10 +13,15 @@ import { AuthenticationService } from 'src/app/_helpers/auth/authentication.serv
 })
 export class CreatePostPage implements OnInit {
   fixHeader: boolean;
+  
   uploadingAttachment:boolean;
+  uploadingAttachmentPercent:any = null;
+  pickedAttachment:any;
   uploadingMedia:boolean;
   uploadingMediaPercent:any = null;
-  uploadingAttachmentPercent:any = null;
+  pickedMedia:any;
+
+  pickedPost:Post;
   showApperance:boolean = false;
   postForm: FormGroup;
   color:any = null;
@@ -31,6 +38,7 @@ export class CreatePostPage implements OnInit {
   constructor(
     private authService: AuthenticationService,
     private navCtrl: NavController,
+    private activatedRoute: ActivatedRoute,
     private fb: FormBuilder,
     private apiService: ApiService
   ) {
@@ -46,6 +54,18 @@ export class CreatePostPage implements OnInit {
       }
     )
     this.postForm.patchValue({font: this.fontlist[0].value});
+
+    this.activatedRoute.params.subscribe(
+      res => {
+        if(res.id) {
+          if(this.apiService.posttoEdit && this.apiService.posttoEdit.id == res.id) {
+            this.pickedPost = this.apiService.posttoEdit;
+            this.initForm();
+            this.visiblity();
+          }
+        }
+      }
+    )
   }
 
   get accFrm() {
@@ -55,20 +75,20 @@ export class CreatePostPage implements OnInit {
   initForm() {
     this.postForm = this.fb.group(
       {
-        title: ['', [Validators.required]],
+        title: [this.pickedPost?.title || '', [Validators.required]],
         upMedia: [''],
         upAttach: [''],
-        content: ['', [Validators.required]],
-        font:[null],
-        bg_color: [null],
-        font_color: [null],
-        author_alias: [''],
-        publish_date: [new Date()],
-        created_date: [ new Date()],
-        status: ['PUBLISHED'],
-        notify_followers: [null],
-        sticky: [null],
-        maecenate: ['', [Validators.required]]
+        content: [this.pickedPost?.content || '', [Validators.required]],
+        font:[this.pickedPost?.customization?.font || null],
+        bg_color: [this.pickedPost?.customization?.bg_color || null],
+        font_color: [this.pickedPost?.customization?.font_color || null],
+        author_alias: [this.pickedPost?.author_alias || ''],
+        publish_date: [new Date(this.pickedPost?.publish_date || null)],
+        created_date: [ new Date(this.pickedPost?.created_date || null)],
+        status: [this.pickedPost?.status || 'PUBLISHED'],
+        notify_followers: [this.pickedPost?.notify_followers || null],
+        sticky: [this.pickedPost?.sticky || null],
+        maecenate: [this.pickedPost?.maecenate || '', [Validators.required]]
       }
     )
     this.accFrm.created_date.disable();
@@ -89,7 +109,6 @@ export class CreatePostPage implements OnInit {
     for(let fl in this.postForm.controls) {
       this.postForm.controls[fl].markAsDirty();
     }
-    console.log(this.postForm.value)
     if(this.postForm.invalid) {
       return;
     }
@@ -108,7 +127,6 @@ export class CreatePostPage implements OnInit {
   }
 
   toggleAppear() {
-    console.log(this.showApperance)
     this.showApperance = !this.showApperance;
   }
 
@@ -124,7 +142,6 @@ export class CreatePostPage implements OnInit {
   }
 
   colorChanged(e, type) {
-    console.log(type, this.color, this.bgColor)
     this.postForm.patchValue(
       {
         bg_color: this.color,
@@ -143,11 +160,13 @@ export class CreatePostPage implements OnInit {
   }
 
   uploadMedia(event) {
-    console.log(event)
     if(event && event.target && event.target.files && event.target.files[0]) {
+      this.readFile(event.target.files[0], 1);
       this.apiService.uploadChunks('MEDIA',this.prepareBody(event.target.files[0])).subscribe(
         res => {
-          console.log(res);
+          if (event.type == res.UploadProgress) {
+            this.updateUpload(1, res);
+          }
         }
       )
     }
@@ -155,12 +174,37 @@ export class CreatePostPage implements OnInit {
 
   uploadAttachment(event) {
     if(event && event.target && event.target.files && event.target.files[0]) {
+      this.readFile(event.target.files[0], 2);
       this.apiService.uploadChunks('FILE',this.prepareBody(event.target.files[0])).subscribe(
         res => {
-          console.log(res);
+          if (event.type == res.UploadProgress) {
+            this.updateUpload(2, res);
+          }
         }
       )
     }
+  }
+
+  updateUpload(type, event) {
+    let percent = Math.round(100 * (event.loaded / event.total));
+    if(type == 1) {
+      this.uploadingMediaPercent = percent;
+    }
+    if(type == 2) {
+      this.uploadingAttachmentPercent = percent;
+    }
+  }
+
+  readFile(file:File, type=1) {
+    var reader = new FileReader();
+    reader.onload = ()=>{
+      if(type == 1) {
+        this.pickedMedia = reader.result;
+      } else if(type == 2) {
+        this.pickedAttachment = reader.result;
+      }
+    };
+    reader.readAsDataURL(file);
   }
 
   prepareBody(file) {
@@ -173,6 +217,10 @@ export class CreatePostPage implements OnInit {
     body.append('dzchunkbyteoffset', '0');
     body.append('file', file);
     return body;
+  }
+
+  changeProfile(profile){
+    this.postForm.patchValue({ maecenate: profile.id });
   }
 
 }

@@ -26,7 +26,7 @@
               <div class="imgs-pfr">
                 <ion-label>Select Profile*</ion-label>
                 <div class="imgss">
-                  <ion-avatar slot="start" *ngFor="let prf of profileItems">
+                  <ion-avatar slot="start" *ngFor="let prf of profileItems" [class.active]="accFrm.maecenate.value == prf.id" (click)="changeProfile(prf)">
                     <img src="{{prf.icon}}" />
                   </ion-avatar>
                 </div>
@@ -85,7 +85,8 @@
               <div class="upload-area-item">
                 <ion-label>Media<br></ion-label>
                 <div class="up-area" (click)="!uploadingMedia ? mediaFile.click() : ''">
-                  <span>Upload Media</span>
+                  <span *ngIf="!pickedMedia">Upload Media</span>
+                  <img *ngIf="pickedMedia" src="{{pickedMedia}}">
                 </div>
                 <p class="sel-img">
                   <ion-progress-bar></ion-progress-bar>
@@ -97,7 +98,8 @@
               <div class="upload-area-item">
                 <ion-label>Attachment<br></ion-label>
                 <div class="up-area" (click)="attachFile.click()">
-                  <span>Upload Attachment</span>
+                  <span *ngIf="!pickedAttachment">Upload Attachment</span>
+                  <img *ngIf="pickedAttachment" src="{{pickedAttachment}}">
                 </div>
                 <p class="sel-img">
                   <ion-progress-bar></ion-progress-bar>

@@ -1,0 +1,54 @@
+<ion-header [class.not-scrolled]="!fixHeader">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/member/dashboard"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Posts</ion-title>
+    <ion-buttons slot="end">
+      <ion-button icon-only (click)="gotoPost()">
+        <ion-icon name="add-circle"></ion-icon>
+      </ion-button>
+      <ion-button icon-only (click)="exitApp()">
+        <ion-icon name="power"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content fullscreen [scrollEvents]="true" (ionScroll)="logScrolling($event)" [class.scrolled]="fixHeader"> 
+  <div class="profile-dashboard">
+    
+    <ion-card class="profile-cards">
+      <ion-card-header>
+        <ion-card-title>Posts</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <ng-container *ngFor="let post of posts">
+          <ion-item>
+            <ion-avatar slot="start">
+              <img src="{{profile?.icon}}" />
+            </ion-avatar>
+            <ion-label>
+              <h3>{{post.title}}</h3>
+              <p>{{post?.publish_date | date : 'dd-MM-YYYY hh:mm'}} </p>
+            </ion-label>
+            <ion-icon slot="end" name="eye" (click)="post.isOpen = !post.isOpen"></ion-icon>
+            <ion-icon slot="end" name="pencil" (click)="openEdit(post)"></ion-icon>
+          </ion-item>
+          <div class="post-content" *ngIf="post.isOpen">
+            <div class="content" [innerHTML]="post.content"></div>
+            <div class="media" *ngIf="post.media">
+              <img *ngFor="let mdi of post.media" src="{{getMediaUrl(mdi.local_path)}}">
+            </div>
+            <div class="attachment" *ngIf="post.file">
+              <b>Download attachment:</b>
+              <p *ngFor="let atch of post.file">
+                <a href="{{getMediaUrl(atch.local_path)}}" download="{{atch.filename}}">{{atch.filename}}</a>
+              </p>
+            </div>
+          </div>
+        </ng-container>
+      </ion-card-content>
+    </ion-card>
+  </div>
+</ion-content>

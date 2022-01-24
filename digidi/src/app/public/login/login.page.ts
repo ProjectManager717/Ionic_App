@@ -54,8 +54,8 @@ export class LoginPage implements OnInit {
     if(this.loginForm.invalid) {
       return;
     }
-    this.navCtrl.navigateRoot(['/','member'])
-    return;
+    // this.navCtrl.navigateRoot(['/','member'])
+    // return;
     this.logging = true;
       this.apiService.loginUser(this.loginForm.value).subscribe(
         res => {

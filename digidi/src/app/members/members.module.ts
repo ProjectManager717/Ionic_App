@@ -6,6 +6,9 @@ const routes: Routes = [
   { path: 'dashboard', 
     loadChildren: () => import('./dashboard/dashboard.module').then( m => m.DashboardPageModule) 
   },
+  { path: 'posts/:profile', 
+    loadChildren: () => import('./posts/posts.module').then( m => m.PostsPageModule) 
+  },
   { path: 'create-post', 
     loadChildren: () => import('./create-post/create-post.module').then( m => m.CreatePostPageModule) 
   },
@@ -22,6 +25,8 @@ const routes: Routes = [
     ReactiveFormsModule,
     RouterModule.forChild(routes)
   ],
-  exports: [RouterModule]
+  exports: [RouterModule],
+  declarations: [
+  ]
 })
 export class MemberModule { }

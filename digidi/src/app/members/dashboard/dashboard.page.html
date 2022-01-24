@@ -21,7 +21,7 @@
       </ion-card-header>
       <ion-card-content>
         <ion-list>
-          <ion-item *ngFor="let profile of prifleItems">
+          <ion-item *ngFor="let profile of prifleItems" [routerLink]="['/member/posts', profile.id]">
             <ion-avatar slot="start">
               <img src="{{profile.icon}}" />
             </ion-avatar>
@@ -46,14 +46,14 @@
       <ion-card-content>
         <form class="form" [formGroup]="accountForm">
           <ion-list lines="none">
-            <ion-item [ngClass]="{'has-error': accFrm.firstName.invalid && accFrm.firstName.dirty}">
+            <ion-item [ngClass]="{'has-error': accFrm.first_name.invalid && accFrm.first_name.dirty}">
               <ion-label>First Name*</ion-label>
-              <ion-input formControlName="firstName" type="text" ></ion-input>
+              <ion-input formControlName="first_name" type="text" ></ion-input>
             </ion-item>
 
-            <ion-item [ngClass]="{'has-error': accFrm.lastName.invalid && accFrm.lastName.dirty}">
+            <ion-item [ngClass]="{'has-error': accFrm.last_name.invalid && accFrm.last_name.dirty}">
               <ion-label>Last Name*</ion-label>
-              <ion-input formControlName="lastName" type="text" ></ion-input>
+              <ion-input formControlName="last_name" type="text" ></ion-input>
             </ion-item>
 
             <ion-item [ngClass]="{'has-error': accFrm.email.invalid && accFrm.email.dirty}">
@@ -66,24 +66,24 @@
               <ion-input formControlName="password" type="text" ></ion-input>
             </ion-item>
             
-            <ion-item [ngClass]="{'has-error': accFrm.addressLine1.invalid && accFrm.addressLine1.dirty}">
+            <ion-item [ngClass]="{'has-error': accFrm.address_1.invalid && accFrm.address_1.dirty}">
               <ion-label>Address1</ion-label>
-              <ion-input formControlName="addressLine1" type="text" ></ion-input>
+              <ion-input formControlName="address_1" type="text" ></ion-input>
             </ion-item>
 
-            <ion-item [ngClass]="{'has-error': accFrm.addressLine2.invalid && accFrm.addressLine2.dirty}">
+            <ion-item [ngClass]="{'has-error': accFrm.address_2.invalid && accFrm.address_2.dirty}">
               <ion-label>Address2</ion-label>
-              <ion-input formControlName="addressLine2" type="text" ></ion-input>
+              <ion-input formControlName="address_2" type="text" ></ion-input>
             </ion-item>
 
-            <ion-item [ngClass]="{'has-error': accFrm.author.invalid && accFrm.author.dirty}">
+            <ion-item [ngClass]="{'has-error': accFrm.alias.invalid && accFrm.alias.dirty}">
               <ion-label>Author</ion-label>
-              <ion-input formControlName="author" type="text" ></ion-input>
+              <ion-input formControlName="alias" type="text" ></ion-input>
             </ion-item>
 
-            <ion-item [ngClass]="{'has-error': accFrm.phone.invalid && accFrm.phone.dirty}">
+            <ion-item [ngClass]="{'has-error': accFrm.phone_number.invalid && accFrm.phone_number.dirty}">
               <ion-label>Phone Number</ion-label>
-              <ion-input formControlName="phone" type="text" ></ion-input>
+              <ion-input formControlName="phone_number" type="text" ></ion-input>
             </ion-item>
 
             <ion-item [ngClass]="{'has-error': accFrm.country.invalid && accFrm.country.dirty}">
@@ -93,51 +93,56 @@
               </ion-select>
             </ion-item>
 
-            <ion-item [ngClass]="{'has-error': accFrm.zipcode.invalid && accFrm.zipcode.dirty}">
+            <ion-item [ngClass]="{'has-error': accFrm.zip_code.invalid && accFrm.zip_code.dirty}">
               <ion-label>Zipcode</ion-label>
-              <ion-input formControlName="zipcode" type="text" ></ion-input>
+              <ion-input formControlName="zip_code" type="text" ></ion-input>
             </ion-item>
 
             <ion-item [ngClass]="{'has-error': accFrm.city.invalid && accFrm.city.dirty}">
               <ion-label>City</ion-label>
               <ion-input formControlName="city" type="text" ></ion-input>
             </ion-item>
+
+            <ion-item [ngClass]="{'has-error': accFrm.bank_account.invalid && accFrm.bank_account.dirty}">
+              <ion-label>Bank Account</ion-label>
+              <ion-input formControlName="bank_account" type="text" ></ion-input>
+            </ion-item>
           </ion-list>
           <ion-item lines="none" class="no-border">
             <ion-label>I represnt a company</ion-label>
-            <ion-checkbox slot="start" formControlName="representCompany" (change)="updateCompanyFields()"></ion-checkbox>
+            <ion-checkbox slot="start" formControlName="is_company" (change)="updateCompanyFields()"></ion-checkbox>
           </ion-item>
-          <ion-list lines="none" class="company-list" *ngIf="accFrm.representCompany.value">
-            <ion-item [ngClass]="{'has-error': accFrm.companyName.invalid && accFrm.companyName.dirty}">
+          <ion-list lines="none" class="company-list" *ngIf="accFrm.is_company.value">
+            <ion-item [ngClass]="{'has-error': accFrm.company_name.invalid && accFrm.company_name.dirty}">
               <ion-label>Company Name*</ion-label>
-              <ion-input formControlName="companyName" type="text" ></ion-input>
+              <ion-input formControlName="company_name" type="text" ></ion-input>
             </ion-item>
 
-            <ion-item [ngClass]="{'has-error': accFrm.companyRegNo.invalid && accFrm.companyRegNo.dirty}">
+            <ion-item [ngClass]="{'has-error': accFrm.company_reg_no.invalid && accFrm.company_reg_no.dirty}">
               <ion-label>Company Reg No*</ion-label>
-              <ion-input formControlName="companyRegNo" type="text" ></ion-input>
+              <ion-input formControlName="company_reg_no" type="text" ></ion-input>
             </ion-item>
 
-            <ion-item [ngClass]="{'has-error': accFrm.companyPhone.invalid && accFrm.companyPhone.dirty}">
+            <ion-item [ngClass]="{'has-error': accFrm.company_phone.invalid && accFrm.company_phone.dirty}">
               <ion-label>Company Phone Number*</ion-label>
-              <ion-input formControlName="companyPhone" type="text" ></ion-input>
+              <ion-input formControlName="company_phone" type="text" ></ion-input>
             </ion-item>
 
-            <ion-item [ngClass]="{'has-error': accFrm.companyZipcode.invalid && accFrm.companyZipcode.dirty}">
+            <ion-item [ngClass]="{'has-error': accFrm.company_zip_code.invalid && accFrm.company_zip_code.dirty}">
               <ion-label>Company Zip Code*</ion-label>
-              <ion-input formControlName="companyZipcode" type="text" ></ion-input>
+              <ion-input formControlName="company_zip_code" type="text" ></ion-input>
             </ion-item>
 
-            <ion-item [ngClass]="{'has-error': accFrm.companyCountry.invalid && accFrm.companyCountry.dirty}">
-              <ion-label>Country</ion-label>
-              <ion-select formControlName="companyCountry">
+            <ion-item [ngClass]="{'has-error': accFrm.company_country.invalid && accFrm.company_country.dirty}">
+              <ion-label>Country*</ion-label>
+              <ion-select formControlName="company_country">
                 <ion-select-option *ngFor="let cntry of [1,2,3,4]" value="{{cntry}}">{{cntry}}</ion-select-option>
               </ion-select>
             </ion-item>
           </ion-list>
         </form>
         <div class="ion-text-center">
-          <ion-button>Submit</ion-button>
+          <ion-button (click)="submit()">Submit</ion-button>
         </div>
       </ion-card-content>
     </ion-card>
