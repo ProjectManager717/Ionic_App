@@ -44,7 +44,7 @@ export class DashboardPage implements OnInit {
    this.isLoading = true;
    this.apiService.myDetails().subscribe(res => {
     if(res.result && res.entities && res.entities.users) {
-      this.updateUser(res.entities[res.result[0]]);
+      this.updateUser(res.entities.users[res.result[0]]);
     }
     this.isLoading = false;
    }) 
@@ -84,7 +84,7 @@ export class DashboardPage implements OnInit {
         zip_code: [this.currentUser?.zip_code || ''],
         city: [this.currentUser?.zip_code || ''],
         bank_account: [this.currentUser?.bank_account || ''],
-        is_company: [this.currentUser?.is_company || null],
+        is_company: [this.currentUser?.is_company || false],
         company_name: [this.currentUser?.company?.company_name || '', [Validators.required] ],
         company_reg_no: [this.currentUser?.company?.company_reg_no || '', [Validators.required] ],
         company_address: [this.currentUser?.company?.company_address || '', [Validators.required] ],
@@ -128,7 +128,7 @@ export class DashboardPage implements OnInit {
     this.apiService.updateDetails(this.mapUser()).subscribe(
       res => {
         if(res.result && res.entities && res.entities.users) {
-          this.updateUser(res.entities[res.result[0]]) 
+          this.updateUser(res.entities.users[res.result[0]]);
         }
       }
     );
@@ -139,6 +139,8 @@ export class DashboardPage implements OnInit {
     let user:User = this.authService.currentUserValue;
     Object.assign(user, newUser);
     this.authService.updateTokenValue(user);
+    this.currentUser = this.authService.currentUserValue;
+    console.log(user, 'up')
     this.initForm();
     this.updateCompanyFields();
   }

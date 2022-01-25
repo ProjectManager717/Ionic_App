@@ -42,8 +42,9 @@
             </div>
             <div class="attachment" *ngIf="post.file">
               <b>Download attachment:</b>
-              <p *ngFor="let atch of post.file">
-                <a href="{{getMediaUrl(atch.local_path)}}" download="{{atch.filename}}">{{atch.filename}}</a>
+              <!-- *ngFor="let atch of post.file" -->
+              <p>
+                <a href="{{getMediaUrl(post.file.local_path,2)}}" download="{{post.file.filename}}">{{post.file.filename}}</a>
               </p>
             </div>
           </div>

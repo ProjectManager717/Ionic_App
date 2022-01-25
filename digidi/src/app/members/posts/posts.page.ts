@@ -43,7 +43,7 @@ export class PostsPage implements OnInit {
   }
 
   getPosts() {
-    this.apiService.getPost(this.pagination.page).subscribe(
+    this.apiService.getPost(this.profile.name, this.pagination.page).subscribe(
       res => {
         if(res.posts && res.posts.length) {
           this.posts = res.posts;
@@ -61,7 +61,7 @@ export class PostsPage implements OnInit {
 
   getMediaUrl(path, type=1) {
     return (path.indexOf('http://') > -1 || path.indexOf('https://') > -1) 
-            ? path : `${environment.baseMediaPath}${path}`
+            ? path : `${environment.baseMediaPath}${type == 1 ? 'thumb/' : 'storage'}${path.split('.')[0]}-sc-1200.${path.split('.')[1]}`
   }
 
   openEdit(post) {

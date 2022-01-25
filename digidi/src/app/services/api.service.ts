@@ -10,7 +10,7 @@ import { StaticService } from './static.service';
 @Injectable({ providedIn: 'root' })
 export class ApiService {
   public postItems = [
-    { name: 'Profile1', id:'cf94d7a0-78fd-11ec-8f6d-49f8a47e0f45', icon: 'assets/img/profile-img.png', subscribers: 0, dkk: 0, total_dkk:0 },
+    { name: 'Test Profiless1', id:'cf94d7a0-78fd-11ec-8f6d-49f8a47e0d44', icon: 'assets/img/profile-img.png', subscribers: 0, dkk: 0, total_dkk:0 },
     { name: 'Profile2', id:'cf94d7a0-78fd-11ec-8f6d-49f8a47e0f46', icon: 'assets/img/profile-img.png', subscribers: 0, dkk: 0, total_dkk:0 },
     { name: 'Profile3', id:'cf94d7a0-78fd-11ec-8f6d-49f8a47e0f43', icon: 'assets/img/profile-img.png', subscribers: 0, dkk: 0, total_dkk:0 },
     { name: 'Profile4', id:'cf94d7a0-78fd-11ec-8f6d-49f8a47e0f42', icon: 'assets/img/profile-img.png', subscribers: 0, dkk: 0, total_dkk:0 },
@@ -34,7 +34,7 @@ export class ApiService {
   }
 
   myDetails():Observable<any> {
-    return of(this.staticService.updateUser);
+    // return of(this.staticService.updateUser);
     return this._httpClient.get(`${environment.baseApiUrl}users/me`);
   }
 
@@ -44,13 +44,15 @@ export class ApiService {
   }
 
   updateDetails(body):Observable<any> {
-    return of(this.staticService.updateUser);
-    return this._httpClient.put(`${environment.baseApiUrl}api/users/me/edit`, body);
+    // return of(this.staticService.updateUser);
+    let user = {user: body};
+    delete user.user.token;
+    return this._httpClient.put(`${environment.baseApiUrl}users/me/edit`, {user:body});
   }
 
 
   loginUser(body): Observable<any> {
-    return of(this.staticService.demoUser);
+    // return of(this.staticService.demoUser);
     let  credentials = body
     return this._httpClient.post(`${environment.baseApiUrl}users/auth`,{credentials});
   }
@@ -63,9 +65,9 @@ export class ApiService {
     return this._httpClient.post(`${environment.baseApiUrl}resetPassword`,body);
   }
 
-  getPost(page): Observable<any> {
-    return of(this.staticService.posts);
-    return this._httpClient.get(`${environment.baseApiUrl}maecenates/coolguy/posts?page=${page}`)
+  getPost(profile='test-profiless1',page): Observable<any> {
+    // return of(this.staticService.posts);
+    return this._httpClient.get(`${environment.baseApiUrl}maecenates/${profile.split(' ').join('-')}/posts?page=${page}`)
   }
   post(body: Post) {
     return this._httpClient.post(`${environment.baseApiUrl}posts/create`,body);
