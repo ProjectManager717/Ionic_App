@@ -77,7 +77,7 @@ export class LoginPage implements OnInit {
           this.logging = false;
         }, error => {
           this.logging = false;
-          this.toastr.presentToast('Oops! something went wrong while login, please try again later.', 'danger')
+          this.toastr.errorReponseToast(error);
         }
       );
   }

@@ -136,6 +136,9 @@ export class DashboardPage implements OnInit {
           this.updateUser(res.entities.users[res.result[0]]);
           this.toastService.presentToast('Account Updated', 'success')
         }
+      }, error => {
+        this.toastService.errorReponseToast(error);
+        this.isLoading =false;
       }
     );
 

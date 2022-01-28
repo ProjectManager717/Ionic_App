@@ -41,4 +41,13 @@ export class ToastService {
     }
     this.loading = null;
   }
+
+  errorReponseToast(error) {
+    if(error.error.errors) {
+      let t = error.error.errors;
+      this.presentToast(t[Object.keys(t)[0]], 'danger')
+    } else {
+      this.presentToast('Oops! something went wrong, please try again later.', 'danger')
+    }
+  }
 }

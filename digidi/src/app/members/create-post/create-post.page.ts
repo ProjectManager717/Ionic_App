@@ -175,6 +175,7 @@ export class CreatePostPage implements OnInit {
         this.loading =false;
         this.toastService.presentToast(ps.id ? 'Post updated successfully!' : 'Post created successfully!', 'success')
       }, error => {
+        this.toastService.errorReponseToast(error);
         this.loading =false;
       }
     )

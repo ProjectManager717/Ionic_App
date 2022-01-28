@@ -5,6 +5,7 @@ import { ApiService } from 'src/app/services/api.service';
 import { AuthenticationService } from 'src/app/_helpers/auth/authentication.service';
 import { Post, ProfileItems } from 'src/app/_helpers/models/order';
 import { Pagination } from 'src/app/_helpers/models/pagination';
+import { ToastService } from 'src/app/_helpers/toast-service/toast.service';
 import { environment } from 'src/environments/environment';
 
 @Component({
@@ -23,7 +24,8 @@ export class PostsPage implements OnInit {
     private apiService: ApiService,
     private navCtrl: NavController,
     private activatedRoute: ActivatedRoute,
-    private authService: AuthenticationService
+    private authService: AuthenticationService,
+    private toastService: ToastService
   ) { 
     this.apiService.posttoEdit = null;
     this.activatedRoute.params.subscribe(res => {
@@ -56,7 +58,8 @@ export class PostsPage implements OnInit {
         }
         this.loading = false;
       }, error => {
-        this.loading = false;
+        this.toastService.errorReponseToast(error);
+        this.loading =false;
       }
     )
   }
