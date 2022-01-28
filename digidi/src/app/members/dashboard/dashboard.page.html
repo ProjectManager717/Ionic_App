@@ -2,9 +2,6 @@
   <ion-toolbar>
     <ion-title>Profile</ion-title>
     <ion-buttons slot="end">
-      <ion-button icon-only (click)="gotoPost()">
-        <ion-icon name="add-circle"></ion-icon>
-      </ion-button>
       <ion-button icon-only (click)="exitApp()">
         <ion-icon name="power"></ion-icon>
       </ion-button>
@@ -21,20 +18,35 @@
       </ion-card-header>
       <ion-card-content>
         <ion-list>
-          <ion-item *ngFor="let profile of prifleItems" [routerLink]="['/member/posts', profile.id]">
-            <ion-avatar slot="start">
-              <img src="{{profile.icon}}" />
-            </ion-avatar>
-            <ion-label>
-              <h3>{{profile.name}}</h3>
-              <p>
-                <b>{{profile.subscribers}} SUBS</b> 
-                &nbsp;<b>DKK {{profile.dkk}}/m</b>
-                <br><b>TOTAL DKK {{profile.total_dkk}}</b>
-              </p>
-            </ion-label>
-            <ion-icon slot="end" name="bar-chart"></ion-icon>
-          </ion-item>
+          <ng-container *ngIf="loadingProfile">
+            <div class="ion-text-center">
+              <ion-spinner></ion-spinner>
+            </div>
+          </ng-container>
+          <ng-container *ngIf="!loadingProfile">
+            <ion-item *ngFor="let profile of prifleItems" [routerLink]="['/member/posts', profile?.id]">
+              <ion-avatar slot="start">
+                <img src="{{getMediaUrl(profile?.logo?.local_path )}}" />
+              </ion-avatar>
+              <ion-label>
+                <h3>{{profile?.title}}</h3>
+                <p>
+                  <b>{{profile?.subscriptions_sum}} SUBS</b> 
+                  &nbsp;<b>{{profile?.currency}} {{profile?.trx_total_qty}}/m</b>
+                  <br><b>TOTAL {{profile?.currency}} {{profile?.trx_total_sum}}</b>
+                </p>
+              </ion-label>
+              <ion-icon slot="end" name="bar-chart"></ion-icon>
+            </ion-item>
+          </ng-container>
+          <ng-container *ngIf="!loadingProfile">
+            <ion-item lines="none">
+              <ion-label class="ion-text-center">
+                <ion-icon name="add-circle"></ion-icon>
+                Add a Profile
+              </ion-label>
+            </ion-item>
+          </ng-container>
         </ion-list>
       </ion-card-content>
     </ion-card>

@@ -23,10 +23,22 @@
         <ion-card-title>Posts</ion-card-title>
       </ion-card-header>
       <ion-card-content>
+        <div  class="ion-text-center" *ngIf="loading">
+          <ion-spinner></ion-spinner>
+        </div>
+        <div  class="ion-text-center" *ngIf="!loading && !posts.length">
+          <ion-item lines="none" (click)="gotoPost()">
+            <ion-label class="ion-text-center">
+              <ion-icon name="add-circle"></ion-icon>
+              Add a post
+            </ion-label>
+          </ion-item>
+        </div>
         <ng-container *ngFor="let post of posts">
-          <ion-item>
+          <ion-item [style.color]="post.customization?.font_color" 
+          [style.background]="post.customization?.bg_color">
             <ion-avatar slot="start">
-              <img src="{{profile?.icon}}" />
+              <img src="{{getMediaUrl(profile?.logo?.local_path )}}" />
             </ion-avatar>
             <ion-label>
               <h3>{{post.title}}</h3>
@@ -35,7 +47,10 @@
             <ion-icon slot="end" name="eye" (click)="post.isOpen = !post.isOpen"></ion-icon>
             <ion-icon slot="end" name="pencil" (click)="openEdit(post)"></ion-icon>
           </ion-item>
-          <div class="post-content" *ngIf="post.isOpen">
+          <div class="post-content" *ngIf="post.isOpen" 
+            [style.color]="post.customization?.font_color" 
+            [style.background]="post.customization?.bg_color"
+          >
             <div class="content" [innerHTML]="post.content"></div>
             <div class="media" *ngIf="post.media">
               <img *ngFor="let mdi of post.media" src="{{getMediaUrl(mdi.local_path)}}">

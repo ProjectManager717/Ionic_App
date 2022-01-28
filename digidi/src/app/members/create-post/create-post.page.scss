@@ -55,3 +55,16 @@ ion-item.pst-itm {
 .quill-wrapper-div {
     margin: 15px 0;
 }
+
+ion-avatar.active {
+    border: 2px solid var(--ion-color-primary);
+    margin-right: 5px;
+}
+.remove-attachment {
+    margin-left: 5px;
+    font-size: 10px;
+    background: grey;
+    border-radius: 50%;
+    padding: 2px 5px;
+    color: #fff;
+}

@@ -3,18 +3,13 @@ import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { EncryptionService } from '../_helpers/encryption/encryption.service';
-import { Post } from '../_helpers/models/order';
+import { Post, ProfileItems } from '../_helpers/models/order';
 import { ToastService } from '../_helpers/toast-service/toast.service';
 import { StaticService } from './static.service';
 
 @Injectable({ providedIn: 'root' })
 export class ApiService {
-  public postItems = [
-    { name: 'Test Profiless1', id:'cf94d7a0-78fd-11ec-8f6d-49f8a47e0d44', icon: 'assets/img/profile-img.png', subscribers: 0, dkk: 0, total_dkk:0 },
-    { name: 'Profile2', id:'cf94d7a0-78fd-11ec-8f6d-49f8a47e0f46', icon: 'assets/img/profile-img.png', subscribers: 0, dkk: 0, total_dkk:0 },
-    { name: 'Profile3', id:'cf94d7a0-78fd-11ec-8f6d-49f8a47e0f43', icon: 'assets/img/profile-img.png', subscribers: 0, dkk: 0, total_dkk:0 },
-    { name: 'Profile4', id:'cf94d7a0-78fd-11ec-8f6d-49f8a47e0f42', icon: 'assets/img/profile-img.png', subscribers: 0, dkk: 0, total_dkk:0 },
-  ]
+  public postItems:ProfileItems[] = []
 
   posttoEdit:any = null;
 
@@ -65,12 +60,22 @@ export class ApiService {
     return this._httpClient.post(`${environment.baseApiUrl}resetPassword`,body);
   }
 
+  getProfiles(user_id): Observable<any> {
+    return this._httpClient.get(`${environment.baseApiUrl}users/${user_id}/admin-maecenates`)
+  }
+
   getPost(profile='test-profiless1',page): Observable<any> {
     // return of(this.staticService.posts);
     return this._httpClient.get(`${environment.baseApiUrl}maecenates/${profile.split(' ').join('-')}/posts?page=${page}`)
   }
+
   post(body: Post) {
-    return this._httpClient.post(`${environment.baseApiUrl}posts/create`,body);
+    let post = body;
+    if(!post.id) {
+      return this._httpClient.post(`${environment.baseApiUrl}posts/create`,{post});
+    } else {
+      return this._httpClient.put(`${environment.baseApiUrl}posts/${post.id}/edit`,{post});
+    }
   }
 
   uploadChunks(role:'MEDIA' | 'FILE' ='MEDIA', body): Observable<any> {
@@ -152,5 +157,11 @@ export class ApiService {
       }
     }
     return form;
+  }
+
+  getMediaUrl(path, type = 1) {
+    let name = (type == 1) ? `${path.split('.')[0]}-sc-1200.${path.split('.')[1]}` : path;
+    return (path.indexOf('http://') > -1 || path.indexOf('https://') > -1) 
+            ? path : `${environment.baseMediaPath}${type == 1 ? 'thumb/' :  'storage/'}${name}`
   }
 }

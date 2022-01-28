@@ -27,7 +27,7 @@
                 <ion-label>Select Profile*</ion-label>
                 <div class="imgss">
                   <ion-avatar slot="start" *ngFor="let prf of profileItems" [class.active]="accFrm.maecenate.value == prf.id" (click)="changeProfile(prf)">
-                    <img src="{{prf.icon}}" />
+                    <img src="{{getMediaUrl(prf?.logo?.local_path)}}" />
                   </ion-avatar>
                 </div>
               </div>
@@ -97,9 +97,11 @@
             <ion-item class="pst-itm upload-area">
               <div class="upload-area-item">
                 <ion-label>Attachment<br></ion-label>
-                <div class="up-area" (click)="attachFile.click()">
+                <div class="up-area" (click)="attachFile.click()" *ngIf="!pickedAttachment">
                   <span *ngIf="!pickedAttachment">Upload Attachment</span>
-                  <img *ngIf="pickedAttachment" src="{{pickedAttachment}}">
+                </div>
+                <div class="up-picked-area" *ngIf="pickedAttachment">
+                  <span>{{pickedAttachment.filename || pickedAttachment.name}}</span><span class="remove-attachment" (click)="removeAttachment()">X</span>
                 </div>
                 <p class="sel-img">
                   <ion-progress-bar></ion-progress-bar>

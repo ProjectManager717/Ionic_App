@@ -4,7 +4,9 @@ import { ActivatedRoute } from '@angular/router';
 import { NavController } from '@ionic/angular';
 import { ApiService } from 'src/app/services/api.service';
 import { AuthenticationService } from 'src/app/_helpers/auth/authentication.service';
+import { User } from 'src/app/_helpers/models';
 import { Post } from 'src/app/_helpers/models/order';
+import { ToastService } from 'src/app/_helpers/toast-service/toast.service';
 
 @Component({
   selector: 'app-create-post',
@@ -35,17 +37,29 @@ export class CreatePostPage implements OnInit {
     {title:'Verdana', value:'Verdana'},
   ]
   profileItems = [];
+  loadingProfile: boolean;
+  currentUser: User;
+  loading: boolean;
   constructor(
     private authService: AuthenticationService,
     private navCtrl: NavController,
     private activatedRoute: ActivatedRoute,
     private fb: FormBuilder,
-    private apiService: ApiService
+    private apiService: ApiService,
+    private toastService: ToastService,
   ) {
     // if(!this.authService.currentUserValue) {
     //   this.exitApp();
     // }
     this.profileItems = this.apiService.postItems;
+
+    this.authService.currentUser.subscribe(
+      res => {
+        this.currentUser = res;
+      }
+    )
+    this.currentUser = this.authService.currentUserValue;
+
     this.initForm();
     this.visiblity();
     this.postForm.get('font').valueChanges.subscribe(
@@ -66,6 +80,10 @@ export class CreatePostPage implements OnInit {
         }
       }
     )
+
+    if(!this.apiService.postItems || !this.apiService.postItems.length) {
+      this.getProfiles();
+    }
   }
 
   get accFrm() {
@@ -82,16 +100,30 @@ export class CreatePostPage implements OnInit {
         font:[this.pickedPost?.customization?.font || null],
         bg_color: [this.pickedPost?.customization?.bg_color || null],
         font_color: [this.pickedPost?.customization?.font_color || null],
-        author_alias: [this.pickedPost?.author_alias || ''],
-        publish_date: [new Date(this.pickedPost?.publish_date || null)],
-        created_date: [ new Date(this.pickedPost?.created_date || null)],
+        author_alias: [this.pickedPost?.author_alias || '', [Validators.required]],
+        publish_date: [this.pickedPost?.publish_date ? new Date(this.pickedPost?.publish_date) : new Date()],
+        created_date: [this.pickedPost?.created_date ? new Date(this.pickedPost?.created_date) : new Date()],
         status: [this.pickedPost?.status || 'PUBLISHED'],
-        notify_followers: [this.pickedPost?.notify_followers || null],
-        sticky: [this.pickedPost?.sticky || null],
+        notify_followers: [this.pickedPost?.notify_followers || false],
+        sticky: [this.pickedPost?.sticky || false],
         maecenate: [this.pickedPost?.maecenate || '', [Validators.required]]
       }
     )
     this.accFrm.created_date.disable();
+    if(this.pickedPost) {
+      if(this.pickedPost.media?.length) {
+        this.pickedMedia = this.getMediaUrl(this.pickedPost.media[0].local_path);
+      }
+      if(this.pickedPost.file) {
+        this.pickedAttachment = this.pickedPost.file;
+      }
+      if(this.pickedPost.customization && this.pickedPost.customization.bg_color) {
+        this.bgColor = this.pickedPost.customization.bg_color;
+      }
+      if(this.pickedPost.customization && this.pickedPost.customization.font_color) {
+        this.color = this.pickedPost.customization.font_color;
+      }
+    }
   }
 
   ngOnInit() {
@@ -112,6 +144,40 @@ export class CreatePostPage implements OnInit {
     if(this.postForm.invalid) {
       return;
     }
+    let data:Post = {
+      title: this.postForm.value.title,
+      content: this.postForm.value.content,
+      author_alias: this.postForm.value.author_alias,
+      publish_date: new Date(this.postForm.value.publish_date).toISOString(),
+      status: this.postForm.value.status,
+      notify_followers: this.postForm.value.notify_followers,
+      sticky: this.postForm.value.sticky,
+      maecenate: this.postForm.value.maecenate,
+    }
+    // custom
+    data.customization = {
+      font: this.postForm.value.font,
+      bg_color:this.postForm.value.bg_color,
+      font_color:this.postForm.value.font_color
+    }
+
+    let ps = data;
+    if(this.pickedPost && this.pickedPost.id) {
+      ps =  JSON.parse(JSON.stringify(this.pickedPost));
+      Object.assign(ps, data);
+      delete ps.post_read_at;
+    } else {
+      // ps.created_date= new Date().toISOString();
+    }
+    this.loading = true;
+    this.apiService.post(ps).subscribe(
+      res => {
+        this.loading =false;
+        this.toastService.presentToast(ps.id ? 'Post updated successfully!' : 'Post created successfully!', 'success')
+      }, error => {
+        this.loading =false;
+      }
+    )
   }
 
   formatDate(value: string) {
@@ -174,7 +240,8 @@ export class CreatePostPage implements OnInit {
 
   uploadAttachment(event) {
     if(event && event.target && event.target.files && event.target.files[0]) {
-      this.readFile(event.target.files[0], 2);
+      this.pickedAttachment = event.target.files[0];
+      console.log(this.pickedAttachment)
       this.apiService.uploadChunks('FILE',this.prepareBody(event.target.files[0])).subscribe(
         res => {
           if (event.type == res.UploadProgress) {
@@ -183,6 +250,10 @@ export class CreatePostPage implements OnInit {
         }
       )
     }
+  }
+
+  removeAttachment() {
+    this.pickedAttachment = null;
   }
 
   updateUpload(type, event) {
@@ -221,6 +292,25 @@ export class CreatePostPage implements OnInit {
 
   changeProfile(profile){
     this.postForm.patchValue({ maecenate: profile.id });
+  }
+
+  getMediaUrl(path, type=1) {
+    return this.apiService.getMediaUrl(path, type)
+  }
+
+  getProfiles() {
+    this.loadingProfile = true;
+    this.apiService.getProfiles(this.currentUser.id).subscribe(
+      res => {
+        if(res && res.maecenates) {
+          this.profileItems = res.maecenates;
+          this.apiService.postItems = this.profileItems;
+        }
+        this.loadingProfile = false;
+      }, error => {
+        this.loadingProfile = false;
+      }
+    )
   }
 
 }

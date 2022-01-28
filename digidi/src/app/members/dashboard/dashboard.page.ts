@@ -6,6 +6,8 @@ import { element } from 'protractor';
 import { ApiService } from 'src/app/services/api.service';
 import { AuthenticationService } from 'src/app/_helpers/auth/authentication.service';
 import { User } from 'src/app/_helpers/models';
+import { FileItem, ProfileItems } from 'src/app/_helpers/models/order';
+import { ToastService } from 'src/app/_helpers/toast-service/toast.service';
 // import { App } from '@capacitor/app';
 
 @Component({
@@ -19,11 +21,13 @@ export class DashboardPage implements OnInit {
   accountForm: FormGroup;
   isLoading:boolean;
   currentUser: User;
+  loadingProfile: boolean;
   constructor(
     private authService: AuthenticationService,
     private navCtrl: NavController,
     private fb: FormBuilder,
-    private apiService: ApiService
+    private apiService: ApiService,
+    private toastService: ToastService,
   ) { 
     // if(!this.authService.currentUserValue) {
     //   this.exitApp();
@@ -36,8 +40,9 @@ export class DashboardPage implements OnInit {
     )
     this.currentUser = this.authService.currentUserValue;
 
-    this.prifleItems = this.apiService.postItems;
+    // this.prifleItems = this.apiService.postItems;
     this.getUserDetails();
+    this.getProfiles();
   }
 
   getUserDetails() {
@@ -105,9 +110,9 @@ export class DashboardPage implements OnInit {
 
   navigaterNow(item:ProfileItems) {
     if(item) {
-      if(item.route){
+      // if(item.route){
         // this.navCtrl.navigateForward(item.route);
-      }
+      // }
     }
   }
 
@@ -129,10 +134,26 @@ export class DashboardPage implements OnInit {
       res => {
         if(res.result && res.entities && res.entities.users) {
           this.updateUser(res.entities.users[res.result[0]]);
+          this.toastService.presentToast('Account Updated', 'success')
         }
       }
     );
 
+  }
+
+  getProfiles() {
+    this.loadingProfile = true;
+    this.apiService.getProfiles(this.currentUser.id).subscribe(
+      res => {
+        if(res && res.maecenates) {
+          this.prifleItems = res.maecenates;
+          this.apiService.postItems = this.prifleItems;
+        }
+        this.loadingProfile = false;
+      }, error => {
+        this.loadingProfile = false;
+      }
+    )
   }
 
   updateUser(newUser) {
@@ -186,9 +207,8 @@ export class DashboardPage implements OnInit {
     this.fixHeader = (event && event.detail && event.detail.currentY > 100);
   }
 
-}
+  getMediaUrl(path, type=1) {
+    return path ? this.apiService.getMediaUrl(path, type) : '';
+  }
 
-
-export class ProfileItems {
-  name: string; icon: string; route?:string;  subscribers?:any; dkk?:any; total_dkk?:any;
 }

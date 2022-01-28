@@ -2,10 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NavController } from '@ionic/angular';
 import { ApiService } from 'src/app/services/api.service';
-import { Post } from 'src/app/_helpers/models/order';
+import { AuthenticationService } from 'src/app/_helpers/auth/authentication.service';
+import { Post, ProfileItems } from 'src/app/_helpers/models/order';
 import { Pagination } from 'src/app/_helpers/models/pagination';
 import { environment } from 'src/environments/environment';
-import { ProfileItems } from '../dashboard/dashboard.page';
 
 @Component({
   selector: 'app-posts',
@@ -17,11 +17,13 @@ export class PostsPage implements OnInit {
   posts:Post[] =[];
   profile:ProfileItems;
   fixHeader: boolean;
+  loading:boolean = false;
 
   constructor(
     private apiService: ApiService,
     private navCtrl: NavController,
-    private activatedRoute: ActivatedRoute
+    private activatedRoute: ActivatedRoute,
+    private authService: AuthenticationService
   ) { 
     this.apiService.posttoEdit = null;
     this.activatedRoute.params.subscribe(res => {
@@ -43,7 +45,8 @@ export class PostsPage implements OnInit {
   }
 
   getPosts() {
-    this.apiService.getPost(this.profile.name, this.pagination.page).subscribe(
+    this.loading = true;
+    this.apiService.getPost(this.profile.slug, this.pagination.page).subscribe(
       res => {
         if(res.posts && res.posts.length) {
           this.posts = res.posts;
@@ -51,6 +54,9 @@ export class PostsPage implements OnInit {
         if(res.pagination) {
           this.pagination = res.pagination;
         }
+        this.loading = false;
+      }, error => {
+        this.loading = false;
       }
     )
   }
@@ -60,8 +66,7 @@ export class PostsPage implements OnInit {
   }
 
   getMediaUrl(path, type=1) {
-    return (path.indexOf('http://') > -1 || path.indexOf('https://') > -1) 
-            ? path : `${environment.baseMediaPath}${type == 1 ? 'thumb/' : 'storage'}${path.split('.')[0]}-sc-1200.${path.split('.')[1]}`
+    return this.apiService.getMediaUrl(path, type)
   }
 
   openEdit(post) {
@@ -69,4 +74,7 @@ export class PostsPage implements OnInit {
     this.navCtrl.navigateForward(['/member/create-post', post.id]);
   }
 
+  exitApp() {
+    this.authService.logout();
+  }
 }
