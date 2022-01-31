@@ -36,7 +36,7 @@
                   <br><b>TOTAL {{profile?.currency}} {{profile?.trx_total_sum}}</b>
                 </p>
               </ion-label>
-              <ion-icon slot="end" name="bar-chart"></ion-icon>
+              <ion-icon slot="end" name="bar-chart" (click)="openWebsite()"></ion-icon>
             </ion-item>
           </ng-container>
           <ng-container *ngIf="!loadingProfile">

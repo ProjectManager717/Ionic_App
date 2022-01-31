@@ -219,14 +219,15 @@ export class DashboardPage implements OnInit {
   
 
   openWebsite() {
-    const openCapacitorSite = async () => {
-      await Browser.open({ url: environment.websiteBaseUrl });
-    };
+    window.open(environment.websiteBaseUrl, '_system');
+    // const openCapacitorSite = async () => {
+    //   await Browser.open({ url: environment.websiteBaseUrl });
+    // };
     
-    Browser.addListener('browserFinished', () => {
-      console.log('browserClosed');
-      Browser.removeAllListeners();
-    });
+    // Browser.addListener('browserFinished', () => {
+    //   console.log('browserClosed');
+    //   Browser.removeAllListeners();
+    // });
   }  
 
 }
