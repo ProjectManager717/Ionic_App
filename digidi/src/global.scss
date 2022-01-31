@@ -125,6 +125,7 @@ ion-content {
         img {
             max-width: 250px;
             width: 30%;
+            margin-top: calc(30% - 10px);
         }
     }
     ion-card {

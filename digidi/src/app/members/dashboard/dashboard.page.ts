@@ -8,6 +8,8 @@ import { AuthenticationService } from 'src/app/_helpers/auth/authentication.serv
 import { User } from 'src/app/_helpers/models';
 import { FileItem, ProfileItems } from 'src/app/_helpers/models/order';
 import { ToastService } from 'src/app/_helpers/toast-service/toast.service';
+import { Browser } from '@capacitor/browser';
+import { environment } from 'src/environments/environment';
 // import { App } from '@capacitor/app';
 
 @Component({
@@ -213,5 +215,18 @@ export class DashboardPage implements OnInit {
   getMediaUrl(path, type=1) {
     return path ? this.apiService.getMediaUrl(path, type) : '';
   }
+
+  
+
+  openWebsite() {
+    const openCapacitorSite = async () => {
+      await Browser.open({ url: environment.websiteBaseUrl });
+    };
+    
+    Browser.addListener('browserFinished', () => {
+      console.log('browserClosed');
+      Browser.removeAllListeners();
+    });
+  }  
 
 }

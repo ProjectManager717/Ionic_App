@@ -40,7 +40,7 @@
             </ion-item>
           </ng-container>
           <ng-container *ngIf="!loadingProfile">
-            <ion-item lines="none">
+            <ion-item lines="none" (click)="openWebsite()">
               <ion-label class="ion-text-center">
                 <ion-icon name="add-circle"></ion-icon>
                 Add a Profile

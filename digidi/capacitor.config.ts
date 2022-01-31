@@ -1,7 +1,7 @@
 import { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
-  appId: 'com.digidi.app',
+  appId: 'staging.digidi.net',
   appName: 'Digidi',
   webDir: 'www',
   bundledWebRuntime: false,
