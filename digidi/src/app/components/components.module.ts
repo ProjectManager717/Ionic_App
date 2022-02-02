@@ -4,12 +4,14 @@ import { IonicModule } from '@ionic/angular';
 import { PipesModule } from '../_helpers/pipes/pipes.module';
 import { VerifyComponent } from './verify/verify.component';
 import { FormsModule } from '@angular/forms';
+import { PostItemComponent } from './post-item/post-item.component';
 
 
 
 @NgModule({
   declarations: [
-    VerifyComponent
+    VerifyComponent,
+    PostItemComponent
   ],
   imports: [
     CommonModule,
@@ -18,7 +20,8 @@ import { FormsModule } from '@angular/forms';
     PipesModule,
   ],
   exports: [
-    VerifyComponent
+    VerifyComponent,
+    PostItemComponent
   ]
 })
 export class ComponentsModule { }

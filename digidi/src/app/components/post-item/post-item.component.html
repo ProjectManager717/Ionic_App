@@ -1,0 +1,28 @@
+<ion-item *ngIf="post" [style.color]="post.customization?.font_color" 
+  [style.background]="post.customization?.bg_color">
+  <ion-avatar slot="start">
+    <img src="{{getMediaUrl(post.poster?.logo?.local_path )}}" />
+  </ion-avatar>
+  <ion-label>
+    <h3>{{post.title}}</h3>
+    <p>{{post?.publish_date | date : 'dd-MM-YYYY hh:mm'}} </p>
+  </ion-label>
+  <ion-icon slot="end" name="eye" (click)="post.isOpen = !post.isOpen"></ion-icon>
+  <!-- <ion-icon slot="end" name="pencil" (click)="openEdit(post)"></ion-icon> -->
+</ion-item>
+<div class="post-content" *ngIf="!post.isOpen" 
+  [style.color]="post.customization?.font_color" 
+  [style.background]="post.customization?.bg_color"
+>
+  <div class="content" [innerHTML]="post.content"></div>
+  <div class="media" *ngIf="post.media">
+    <img *ngFor="let mdi of post.media" src="{{getMediaUrl(mdi.local_path)}}">
+  </div>
+  <div class="attachment" *ngIf="post.file">
+    <b>Download attachment:</b>
+    <!-- *ngFor="let atch of post.file" -->
+    <p>
+      <a href="{{getMediaUrl(post.file.local_path,2)}}" download="{{post.file.filename}}">{{post.file.filename}}</a>
+    </p>
+  </div>
+</div>

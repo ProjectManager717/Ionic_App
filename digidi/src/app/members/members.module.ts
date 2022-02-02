@@ -12,9 +12,12 @@ const routes: Routes = [
   { path: 'create-post', 
     loadChildren: () => import('./create-post/create-post.module').then( m => m.CreatePostPageModule) 
   },
+  { path: 'feeds', 
+    loadChildren: () => import('./feeds/feeds.module').then( m => m.FeedsPageModule) 
+  },
   {
     path: '',
-    redirectTo: 'dashboard',
+    redirectTo: 'feeds',
     pathMatch: 'full'
   },
 ];

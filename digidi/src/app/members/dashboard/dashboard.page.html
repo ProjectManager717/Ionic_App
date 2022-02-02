@@ -1,7 +1,13 @@
 <ion-header [class.not-scrolled]="!fixHeader">
   <ion-toolbar>
-    <ion-title>Profile</ion-title>
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+    <ion-title>Account</ion-title>
     <ion-buttons slot="end">
+      <ion-button icon-only (click)="gotoFeed()">
+        <ion-icon name="newspaper-outline"></ion-icon>
+      </ion-button>
       <ion-button icon-only (click)="exitApp()">
         <ion-icon name="power"></ion-icon>
       </ion-button>

@@ -216,7 +216,9 @@ export class DashboardPage implements OnInit {
     return path ? this.apiService.getMediaUrl(path, type) : '';
   }
 
-  
+  gotoFeed() {
+    this.navCtrl.navigateBack(['/member/feeds'])
+  }
 
   openWebsite() {
     window.open(environment.websiteBaseUrl, '_system');

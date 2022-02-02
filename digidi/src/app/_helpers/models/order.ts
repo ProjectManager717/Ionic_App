@@ -14,6 +14,7 @@ export class Post {
     maecenate?:string;
     post_read_at?:any;
     isOpen?:boolean;
+    poster?:any;
 }
 
 export class Customization {

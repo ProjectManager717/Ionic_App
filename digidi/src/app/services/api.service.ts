@@ -64,6 +64,9 @@ export class ApiService {
     return this._httpClient.get(`${environment.baseApiUrl}users/${user_id}/admin-maecenates`)
   }
 
+  getFeeds(page = 1): Observable<any> {
+    return this._httpClient.get(`${environment.baseApiUrl}users/me/feed?page=${page}`)
+  }
   getPost(profile='test-profiless1',page): Observable<any> {
     // return of(this.staticService.posts);
     return this._httpClient.get(`${environment.baseApiUrl}maecenates/${profile.split(' ').join('-')}/posts?page=${page}`)

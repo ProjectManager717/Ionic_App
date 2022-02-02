@@ -1,0 +1,16 @@
+.post-content{
+    padding: 5px 0px 5px 10px;
+    .content {
+
+    }
+    .media{
+        display: flex;
+        flex-wrap: wrap;
+        img {
+            max-width: 150px;
+        }
+    }
+    .attachment{
+
+    }
+}
