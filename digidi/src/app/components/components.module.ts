@@ -5,13 +5,15 @@ import { PipesModule } from '../_helpers/pipes/pipes.module';
 import { VerifyComponent } from './verify/verify.component';
 import { FormsModule } from '@angular/forms';
 import { PostItemComponent } from './post-item/post-item.component';
+import { MediaDispComponent } from './media-disp/media-disp.component';
 
 
 
 @NgModule({
   declarations: [
     VerifyComponent,
-    PostItemComponent
+    PostItemComponent,
+    MediaDispComponent
   ],
   imports: [
     CommonModule,
@@ -21,7 +23,8 @@ import { PostItemComponent } from './post-item/post-item.component';
   ],
   exports: [
     VerifyComponent,
-    PostItemComponent
+    PostItemComponent,
+    MediaDispComponent
   ]
 })
 export class ComponentsModule { }

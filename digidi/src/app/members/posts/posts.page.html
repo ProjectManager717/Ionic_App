@@ -53,13 +53,17 @@
           >
             <div class="content" [innerHTML]="post.content"></div>
             <div class="media" *ngIf="post.media">
-              <img *ngFor="let mdi of post.media" src="{{getMediaUrl(mdi.local_path)}}">
+              <ng-container *ngFor="let mdi of post.media">
+                <app-media-disp [media]="mdi"></app-media-disp>
+              </ng-container>
             </div>
             <div class="attachment" *ngIf="post.file">
               <b>Download attachment:</b>
               <!-- *ngFor="let atch of post.file" -->
               <p>
-                <a href="{{getMediaUrl(post.file.local_path,2)}}" download="{{post.file.filename}}">{{post.file.filename}}</a>
+                <a href="{{getMediaUrl(post.file.local_path,2)}}" download="{{post.file.filename}}">
+                  <app-media-disp [media]="post.file" [isFile]="true"></app-media-disp>
+                </a>
               </p>
             </div>
           </div>

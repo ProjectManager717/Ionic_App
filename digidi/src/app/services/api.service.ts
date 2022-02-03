@@ -163,6 +163,7 @@ export class ApiService {
   }
 
   getMediaUrl(path, type = 1) {
+    // type 1 = media image, 2= file image, 3 = audio, 4= video
     let name = (type == 1) ? `${path.split('.')[0]}-sc-1200.${path.split('.')[1]}` : path;
     return (path.indexOf('http://') > -1 || path.indexOf('https://') > -1) 
             ? path : `${environment.baseMediaPath}${type == 1 ? 'thumb/' :  'storage/'}${name}`

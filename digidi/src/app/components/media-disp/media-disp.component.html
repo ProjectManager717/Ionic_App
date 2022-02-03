@@ -1,0 +1,18 @@
+<ng-container *ngIf="media">
+  <ng-container *ngIf="media.file_type=='image'">
+    <img  src="{{getMediaUrl(media.local_path)}}">
+  </ng-container>
+  <ng-container *ngIf="media.file_type=='audio'">
+    <audio controls="" src="{{getMediaUrl(media.local_path, 3)}}">
+      Your browser does not support this content.
+    </audio>
+  </ng-container>
+  <ng-container *ngIf="media.file_type=='video'">
+    <video src="{{getMediaUrl(media.local_path, 4)}}" controls>
+      Your browser doesn't support this content.
+    </video>
+  </ng-container>
+  <ng-container *ngIf="!['video','audio', 'image'].includes(media.file_type)">
+    {{media.filename}}
+  </ng-container>
+</ng-container>
