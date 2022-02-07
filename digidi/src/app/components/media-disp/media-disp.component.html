@@ -1,14 +1,14 @@
 <ng-container *ngIf="media">
   <ng-container *ngIf="media.file_type=='image'">
-    <img  src="{{getMediaUrl(media.local_path)}}">
+    <img  [src]="getMediaUrl(media.local_path)  | secure | async">
   </ng-container>
   <ng-container *ngIf="media.file_type=='audio'">
-    <audio controls="" src="{{getMediaUrl(media.local_path, 3)}}">
+    <audio controls="" [src]="getMediaUrl(media.local_path, 3) | secure | async">
       Your browser does not support this content.
     </audio>
   </ng-container>
   <ng-container *ngIf="media.file_type=='video'">
-    <video src="{{getMediaUrl(media.local_path, 4)}}" controls>
+    <video [src]="getMediaUrl(media.local_path, 4) | secure | async" controls style="width: 100%;">
       Your browser doesn't support this content.
     </video>
   </ng-container>

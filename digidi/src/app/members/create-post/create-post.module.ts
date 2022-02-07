@@ -8,9 +8,9 @@ import { CreatePostPageRoutingModule } from './create-post-routing.module';
 
 import { CreatePostPage } from './create-post.page';
 import { ComponentsModule } from 'src/app/components/components.module';
-import { PipesModule } from 'src/app/pipes/pipes.module';
 import { ColorPickerModule } from 'ngx-color-picker';
 import { QuillModule } from 'ngx-quill'
+import { PipesModule } from 'src/app/_helpers/pipes/pipes.module';
 
 @NgModule({
   imports: [

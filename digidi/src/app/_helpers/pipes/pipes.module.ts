@@ -1,8 +1,9 @@
 import { NgModule } from '@angular/core';
 import { SafeurlPipe } from './safeurl/safeurl';
+import { SecurePipe } from './secure/secure';
 @NgModule({
-	declarations: [SafeurlPipe],
+	declarations: [SafeurlPipe, SecurePipe],
 	imports: [],
-	exports: [SafeurlPipe]
+	exports: [SafeurlPipe, SecurePipe]
 })
 export class PipesModule {}

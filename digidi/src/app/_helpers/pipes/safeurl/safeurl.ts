@@ -8,6 +8,6 @@ import { DomSanitizer } from "@angular/platform-browser";
     constructor(private domSanitizer: DomSanitizer) {}
     transform(url, toremote = true) {
       // let mainurl = !toremote ? url : (url.indexOf('://') == -1) ? url : url;
-      return this.domSanitizer.bypassSecurityTrustResourceUrl(url);
+      return this.domSanitizer.bypassSecurityTrustUrl(url);
     }
   }

@@ -19,11 +19,13 @@ import { environment } from 'src/environments/environment';
 })
 export class DashboardPage implements OnInit {
   prifleItems: ProfileItems[] = []
+  supportors: ProfileItems[] = []
   fixHeader: boolean;
   accountForm: FormGroup;
   isLoading:boolean;
   currentUser: User;
   loadingProfile: boolean;
+  loadingSubscriptions:boolean
   constructor(
     private authService: AuthenticationService,
     private navCtrl: NavController,
@@ -45,6 +47,7 @@ export class DashboardPage implements OnInit {
     // this.prifleItems = this.apiService.postItems;
     this.getUserDetails();
     this.getProfiles();
+    this.getSupports();
   }
 
   getUserDetails() {
@@ -157,6 +160,20 @@ export class DashboardPage implements OnInit {
         this.loadingProfile = false;
       }, error => {
         this.loadingProfile = false;
+      }
+    )
+  }
+
+  getSupports() {
+    this.loadingSubscriptions = true;
+    this.apiService.getSupports().subscribe(
+      res => {
+        if(res) {
+          this.supportors = res;
+        }
+        this.loadingSubscriptions = false;
+      }, error => {
+        this.loadingSubscriptions = false;
       }
     )
   }

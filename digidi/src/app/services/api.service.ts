@@ -64,6 +64,10 @@ export class ApiService {
     return this._httpClient.get(`${environment.baseApiUrl}users/${user_id}/admin-maecenates`)
   }
 
+  getSupports(): Observable<any> {
+      return this._httpClient.get(`${environment.baseApiUrl}users/me/supported-maecenates`)
+  }
+
   getFeeds(page = 1): Observable<any> {
     return this._httpClient.get(`${environment.baseApiUrl}users/me/feed?page=${page}`)
   }
