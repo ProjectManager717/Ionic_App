@@ -24,7 +24,8 @@
     <b>Download attachment:</b>
     <!-- *ngFor="let atch of post.file" -->
     <p>
-      <a href="{{getMediaUrl(post.file.local_path,2)}}" download="{{post.file.filename}}">
+      <!-- href="{{getMediaUrl(post.file.local_path,2)}}" download="{{post.file.filename}}" -->
+      <a>
         <app-media-disp [media]="post.file" [isFile]="true"></app-media-disp>
       </a>
     </p>
