@@ -80,4 +80,11 @@ export class PostsPage implements OnInit {
   exitApp() {
     this.authService.logout();
   }
+
+  markRead(post:Post) {
+    post.post_read_at = (post.post_read_at) ? null : true;
+    this.apiService.readPost(post.id).subscribe(
+      res => {}
+    )
+  }
 }

@@ -30,7 +30,7 @@ export class DashboardPage implements OnInit {
     private authService: AuthenticationService,
     private navCtrl: NavController,
     private fb: FormBuilder,
-    private apiService: ApiService,
+    public apiService: ApiService,
     private toastService: ToastService,
   ) { 
     // if(!this.authService.currentUserValue) {
@@ -237,16 +237,17 @@ export class DashboardPage implements OnInit {
     this.navCtrl.navigateBack(['/member/feeds'])
   }
 
-  openWebsite() {
-    window.open(environment.websiteBaseUrl, '_system');
-    // const openCapacitorSite = async () => {
-    //   await Browser.open({ url: environment.websiteBaseUrl });
-    // };
-    
-    // Browser.addListener('browserFinished', () => {
-    //   console.log('browserClosed');
-    //   Browser.removeAllListeners();
-    // });
-  }  
+  openWebsite(url = environment.websiteBaseUrl) {
+    this.apiService.openWebsite(url);
+  }
+
+  openProfileDashboard(profileSlug:string) {
+    this.openWebsite(`${environment.websiteBaseUrl}/profile/${profileSlug}/dashboard`);
+  }
+
+  openSupporterProfile(event: Event,profileSlug: string) {
+    if(event) event.stopPropagation();
+    this.openWebsite(`${environment.websiteBaseUrl}/${profileSlug}`);
+  }
 
 }

@@ -47,10 +47,10 @@
               <h3>{{post.title}}</h3>
               <p>{{post?.publish_date | date : 'dd-MM-YYYY hh:mm'}} </p>
             </ion-label>
-            <ion-icon slot="end" name="eye" (click)="post.isOpen = !post.isOpen"></ion-icon>
+            <ion-icon slot="end" name="eye" (click)="markRead(post)"></ion-icon>
             <ion-icon slot="end" name="pencil" (click)="openEdit(post)"></ion-icon>
           </ion-item>
-          <div class="post-content" *ngIf="post.isOpen" 
+          <div class="post-content" *ngIf="!post.post_read_at" 
             [style.color]="post.customization?.font_color" 
             [style.background]="post.customization?.bg_color"
           >

@@ -1,5 +1,7 @@
 import { HttpClient, HttpEvent } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Browser } from '@capacitor/browser';
+import { Platform } from '@ionic/angular';
 import { Observable, of } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { EncryptionService } from '../_helpers/encryption/encryption.service';
@@ -18,13 +20,16 @@ export class ApiService {
    *
    * @param {HttpClient} _httpClient
    */
-
+  //weburls :
+  createProfile = `${environment.websiteBaseUrl}profile/create`;
+  searchProfile = `${environment.websiteBaseUrl}profiles`;
   
   constructor(
     private _httpClient: HttpClient,
     private encryptionService: EncryptionService,
     private toastr: ToastService,
-    private staticService: StaticService
+    private staticService: StaticService,
+    private platForm: Platform
   ) {
   }
 
@@ -124,6 +129,10 @@ export class ApiService {
     return this._httpClient.get(`${environment.baseApiUrl}getOrder/${userID}`);
   }
 
+  readPost(postId:any) {
+    return this._httpClient.post(`${environment.baseApiUrl}posts/${postId}/read`, {});
+  }
+
   resendEmailConfirmation(data): Observable<any> {
     return this._httpClient.post(`${environment.baseApiUrl}resendEmailConfirmation`, data);
   }
@@ -171,5 +180,21 @@ export class ApiService {
     let name = (type == 1) ? `${path.split('.')[0]}-sc-1200.${path.split('.')[1]}` : path;
     return (path.indexOf('http://') > -1 || path.indexOf('https://') > -1) 
             ? path : `${environment.baseMediaPath}${type == 1 ? 'thumb/' :  'storage/'}${name}`
+  }
+
+  openWebsite(url = environment.websiteBaseUrl) {
+    if(this.platForm.is('capacitor')) {
+      Browser.open({ url: environment.websiteBaseUrl });
+    } else {
+      window.open(environment.websiteBaseUrl, '_system');
+    }
+  }  
+
+  openCreateProfile() {
+    this.openWebsite(this.createProfile);
+  }
+
+  openSearch() {
+    this.openWebsite(this.searchProfile);
   }
 }

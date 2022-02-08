@@ -26,7 +26,7 @@ export class FeedsPage implements OnInit {
   constructor(
     private authService: AuthenticationService,
     private navCtrl: NavController,
-    private apiService: ApiService,
+    public apiService: ApiService,
     private toastService: ToastService,
   ) { 
     // if(!this.authService.currentUserValue) {

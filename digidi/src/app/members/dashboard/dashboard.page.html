@@ -5,7 +5,7 @@
     </ion-buttons>
     <ion-title>Account</ion-title>
     <ion-buttons slot="end">
-      <ion-button icon-only (click)="openWebsite(true)">
+      <ion-button icon-only (click)="apiService.openSearch()">
         <ion-icon name="search-circle-outline"></ion-icon>
       </ion-button>
       <ion-button icon-only (click)="gotoFeed()">
@@ -45,11 +45,11 @@
                   <br><b>TOTAL {{profile?.currency}} {{profile?.trx_total_sum}}</b>
                 </p>
               </ion-label>
-              <ion-icon slot="end" name="bar-chart" (click)="openWebsite()"></ion-icon>
+              <ion-icon slot="end" name="bar-chart" (click)="openProfileDashboard($event,profile.slug)"></ion-icon>
             </ion-item>
           </ng-container>
           <ng-container *ngIf="!loadingProfile">
-            <ion-item lines="none" (click)="openWebsite()">
+            <ion-item lines="none" (click)="apiService.openCreateProfile()">
               <ion-label class="ion-text-center">
                 <ion-icon name="add-circle"></ion-icon>
                 Add a Profile
@@ -72,7 +72,7 @@
             </div>
           </ng-container>
           <ng-container *ngIf="!loadingSubscriptions">
-            <ion-item *ngFor="let support of supportors" (click)="openWebsite()">
+            <ion-item *ngFor="let support of supportors" (click)="openSupporterProfile(support.slug)">
               <ion-avatar slot="start">
                 <img src="{{getMediaUrl(support?.logo?.local_path )}}" />
               </ion-avatar>
