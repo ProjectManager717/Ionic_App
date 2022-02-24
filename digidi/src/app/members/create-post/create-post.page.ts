@@ -7,6 +7,7 @@ import { AuthenticationService } from 'src/app/_helpers/auth/authentication.serv
 import { User } from 'src/app/_helpers/models';
 import { Post } from 'src/app/_helpers/models/order';
 import { ToastService } from 'src/app/_helpers/toast-service/toast.service';
+import {v4 as uuidv4} from 'uuid';
 
 @Component({
   selector: 'app-create-post',
@@ -112,7 +113,7 @@ export class CreatePostPage implements OnInit {
     this.accFrm.created_date.disable();
     if(this.pickedPost) {
       if(this.pickedPost.media?.length) {
-        this.pickedMedia = this.getMediaUrl(this.pickedPost.media[0].local_path);
+        this.pickedMedia = this.pickedPost.media[0];
       }
       if(this.pickedPost.file) {
         this.pickedAttachment = this.pickedPost.file;
@@ -127,6 +128,7 @@ export class CreatePostPage implements OnInit {
   }
 
   ngOnInit() {
+    console.log(this.pickedPost)
   }
 
   exitApp() {
@@ -153,6 +155,8 @@ export class CreatePostPage implements OnInit {
       notify_followers: this.postForm.value.notify_followers,
       sticky: this.postForm.value.sticky,
       maecenate: this.postForm.value.maecenate,
+      media: this.pickedMedia || null,
+      file: this.pickedAttachment || null
     }
     // custom
     data.customization = {
@@ -174,6 +178,7 @@ export class CreatePostPage implements OnInit {
       res => {
         this.loading =false;
         this.toastService.presentToast(ps.id ? 'Post updated successfully!' : 'Post created successfully!', 'success')
+        this.navCtrl.back();
       }, error => {
         this.toastService.errorReponseToast(error);
         this.loading =false;
@@ -229,11 +234,18 @@ export class CreatePostPage implements OnInit {
   uploadMedia(event) {
     if(event && event.target && event.target.files && event.target.files[0]) {
       this.readFile(event.target.files[0], 1);
-      this.apiService.uploadChunks('MEDIA',this.prepareBody(event.target.files[0])).subscribe(
+      this.uploadingMediaPercent = 0;
+      let data = this.prepareBody(event.target.files[0]);
+      this.uploadingMedia = false
+      this.apiService.uploadChunks('MEDIA',data, this.updateUpload, this).then(
         res => {
-          if (event.type == res.UploadProgress) {
-            this.updateUpload(1, res);
+          console.log(res);
+          if(res.data.result?.length && res.data.entities) {
+            this.pickedMedia = res.data.entities.media[res.data.result[0]]
           }
+          this.uploadingMedia = false
+        }, error => {
+          this.uploadingMedia = false
         }
       )
     }
@@ -242,12 +254,17 @@ export class CreatePostPage implements OnInit {
   uploadAttachment(event) {
     if(event && event.target && event.target.files && event.target.files[0]) {
       this.pickedAttachment = event.target.files[0];
-      console.log(this.pickedAttachment)
-      this.apiService.uploadChunks('FILE',this.prepareBody(event.target.files[0])).subscribe(
+      this.uploadingAttachmentPercent = 0;
+      let data =this.prepareBody(event.target.files[0]);
+      this.uploadingAttachment = true;
+      this.apiService.uploadChunks('FILE', data,  this.updateUpload, this).then(
         res => {
-          if (event.type == res.UploadProgress) {
-            this.updateUpload(2, res);
+          if(res.data.result?.length && res.data.entities) {
+            this.pickedAttachment = res.data.entities.media[res.data.result[0]]
           }
+          this.uploadingAttachment = false;
+        }, error => {
+          this.uploadingAttachment = false;
         }
       )
     }
@@ -255,15 +272,16 @@ export class CreatePostPage implements OnInit {
 
   removeAttachment() {
     this.pickedAttachment = null;
+    this.uploadingAttachmentPercent = 0;
   }
 
-  updateUpload(type, event) {
-    let percent = Math.round(100 * (event.loaded / event.total));
-    if(type == 1) {
-      this.uploadingMediaPercent = percent;
+  updateUpload(type, event, zon) {
+    let percent = 100 / event;
+    if(type == 'MEDIA') {
+      zon.uploadingMediaPercent = percent;
     }
-    if(type == 2) {
-      this.uploadingAttachmentPercent = percent;
+    if(type == 'FILE')  {
+      zon.uploadingAttachmentPercent = percent;
     }
   }
 
@@ -281,9 +299,9 @@ export class CreatePostPage implements OnInit {
 
   prepareBody(file) {
     let body = new FormData();
-    body.append('dzuuid','1e72d07e-b200-4f5b-925d-eedbb29f5c3d');
-    body.append('dzchunkindex','1e72d07e-b200-4f5b-925d-eedbb29f5c3d');
-    body.append('dzchunksize','5000000');
+    body.append('dzuuid', uuidv4());
+    body.append('dzchunkindex','0');
+    body.append('dzchunksize', file.size+5000);
     body.append('dztotalfilesize',file.size);
     body.append('dztotalchunkcount','1');
     body.append('dzchunkbyteoffset', '0');

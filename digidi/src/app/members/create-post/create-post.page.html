@@ -3,7 +3,7 @@
     <ion-buttons slot="start">
       <ion-back-button defaultHref="/member/dashboard"></ion-back-button>
     </ion-buttons>
-    <ion-title>Create Post</ion-title>
+    <ion-title> {{ pickedPost && pickedPost.id ? 'Update Post' : 'Create Post'}}</ion-title>
     <ion-buttons slot="end">
       <ion-button icon-only (click)="exitApp()">
         <ion-icon name="power"></ion-icon>
@@ -16,7 +16,7 @@
   <div class="create-post">
     <ion-card class="account-cards">
       <ion-card-header>
-        <ion-card-title>Create Post</ion-card-title>
+        <ion-card-title>{{ pickedPost && pickedPost.id ? 'Update Post' : 'Create Post'}}</ion-card-title>
       </ion-card-header>
       <ion-card-content>
         <form class="form" [formGroup]="postForm">
@@ -86,10 +86,10 @@
                 <ion-label>Media<br></ion-label>
                 <div class="up-area" (click)="!uploadingMedia ? mediaFile.click() : ''">
                   <span *ngIf="!pickedMedia">Upload Media</span>
-                  <img *ngIf="pickedMedia" src="{{pickedMedia}}">
+                  <app-media-disp *ngIf="pickedMedia" [media]="pickedMedia"></app-media-disp>
                 </div>
                 <p class="sel-img">
-                  <ion-progress-bar></ion-progress-bar>
+                  <ion-progress-bar [value]="uploadingMediaPercent || 0"></ion-progress-bar>
                 </p>
                 <input class="hideinpt" type="file" #mediaFile (change)="uploadMedia($event)">
               </div>
@@ -104,7 +104,7 @@
                   <span>{{pickedAttachment.filename || pickedAttachment.name}}</span><span class="remove-attachment" (click)="removeAttachment()">X</span>
                 </div>
                 <p class="sel-img">
-                  <ion-progress-bar></ion-progress-bar>
+                  <ion-progress-bar [value]="uploadingAttachmentPercent || 0"></ion-progress-bar>
                 </p>
                 <input class="hideinpt" type="file" #attachFile (change)="!uploadingAttachment ? uploadAttachment($event) : ''">
               </div>
@@ -173,7 +173,7 @@
 
           </ion-list>
         </form>
-        <ion-button (click)="creatPost()">Create Post</ion-button>
+        <ion-button (click)="creatPost()">{{ pickedPost && pickedPost.id ? 'Update Post' : 'Create Post'}}</ion-button>
       </ion-card-content>
     </ion-card>
   </div>

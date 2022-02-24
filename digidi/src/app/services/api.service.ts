@@ -1,13 +1,15 @@
-import { HttpClient, HttpEvent } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Browser } from '@capacitor/browser';
 import { Platform } from '@ionic/angular';
 import { Observable, of } from 'rxjs';
 import { environment } from 'src/environments/environment';
+import { AuthenticationService } from '../_helpers/auth/authentication.service';
 import { EncryptionService } from '../_helpers/encryption/encryption.service';
 import { Post, ProfileItems } from '../_helpers/models/order';
 import { ToastService } from '../_helpers/toast-service/toast.service';
 import { StaticService } from './static.service';
+import  axios  from 'axios'
 
 @Injectable({ providedIn: 'root' })
 export class ApiService {
@@ -29,7 +31,8 @@ export class ApiService {
     private encryptionService: EncryptionService,
     private toastr: ToastService,
     private staticService: StaticService,
-    private platForm: Platform
+    private platForm: Platform,
+    private authService: AuthenticationService
   ) {
   }
 
@@ -90,11 +93,16 @@ export class ApiService {
     }
   }
 
-  uploadChunks(role:'MEDIA' | 'FILE' ='MEDIA', body): Observable<any> {
-    // body: { dzuuid: 1e72d07e-b200-4f5b-925d-eedbb29f5c3d dzchunkindex: 0 dztotalfilesize: 121036
-    // dzchunksize: 5000000, dztotalchunkcount: 1, dzchunkbyteoffset: 0, file: (binary) }
-    // {"entities":{"media":{"d13d8a10-79b7-11ec-8f6d-49f8a47e0d44":{"id":"d13d8a10-79b7-11ec-8f6d-49f8a47e0d44","type":"image/png","role":"MEDIA","filename":"image_2022_01_18T15_08_20_302Z.png","local_path":"image/6f/fcc7ce60cff2eebca937a98cde9cdc.png","file_type":"image","props":{},"img_width":512,"img_height":512}}},"result":["d13d8a10-79b7-11ec-8f6d-49f8a47e0d44"]}
-    return this._httpClient.post(`${environment.baseApiUrl}files/upload-by-chunk?role=${role}`,body, { reportProgress: true});
+  uploadChunks(role:'MEDIA' | 'FILE' ='MEDIA', body, callBack, zon): Promise<any> {
+    const config = {
+      onUploadProgress: (progressEvent) => {
+        var percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total)
+        callBack(role, percentCompleted, zon)
+      },
+      headers:{'Content-type':'multipart/form-data;', 'Authorization': this.authService.currentUserValue.token}
+    }
+    //
+    return axios.post(`${environment.baseApiUrl}files/upload-by-chunk?role=${role}`,body, config);
   }
   
   socialMediaLogin(body): Observable<any> {
