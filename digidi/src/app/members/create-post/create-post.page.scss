@@ -53,7 +53,6 @@ ion-item.pst-itm {
 }
 
 .quill-wrapper-div {
-    margin: 15px 0;
 }
 
 ion-avatar.active {
@@ -67,4 +66,8 @@ ion-avatar.active {
     border-radius: 50%;
     padding: 2px 5px;
     color: #fff;
+}
+
+.quill-brd.has-error {
+    border: 1px solid red;
 }

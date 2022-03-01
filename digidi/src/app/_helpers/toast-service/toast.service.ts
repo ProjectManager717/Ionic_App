@@ -45,9 +45,9 @@ export class ToastService {
   errorReponseToast(error) {
     if(error.error.errors) {
       let t = error.error.errors;
-      this.presentToast(t[Object.keys(t)[0]], 'danger')
+      this.presentToast(`${Object.keys(t)[0]} - ${t[Object.keys(t)[0]]}`, 'danger', 'bottom')
     } else {
-      this.presentToast('Oops! something went wrong, please try again later.', 'danger')
+      this.presentToast('Oops! something went wrong, please try again later.', 'danger', 'bottom')
     }
   }
 }

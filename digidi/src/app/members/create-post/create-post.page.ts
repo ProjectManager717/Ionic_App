@@ -41,6 +41,7 @@ export class CreatePostPage implements OnInit {
   loadingProfile: boolean;
   currentUser: User;
   loading: boolean;
+  posting:boolean;
   constructor(
     private authService: AuthenticationService,
     private navCtrl: NavController,
@@ -144,6 +145,9 @@ export class CreatePostPage implements OnInit {
       this.postForm.controls[fl].markAsDirty();
     }
     if(this.postForm.invalid) {
+      let invalidInput:any = document.querySelectorAll('.has-error');
+      if(invalidInput && invalidInput[0]) invalidInput[0].scrollIntoView()
+      this.toastService.presentToast('Please fill all required fields', 'danger', 'bottom')
       return;
     }
     let data:Post = {
@@ -173,15 +177,15 @@ export class CreatePostPage implements OnInit {
     } else {
       // ps.created_date= new Date().toISOString();
     }
-    this.loading = true;
+    this.posting = true;
     this.apiService.post(ps).subscribe(
       res => {
-        this.loading =false;
+        this.posting =false;
         this.toastService.presentToast(ps.id ? 'Post updated successfully!' : 'Post created successfully!', 'success')
         this.navCtrl.back();
       }, error => {
         this.toastService.errorReponseToast(error);
-        this.loading =false;
+        this.posting =false;
       }
     )
   }
@@ -216,8 +220,8 @@ export class CreatePostPage implements OnInit {
   colorChanged(e, type) {
     this.postForm.patchValue(
       {
-        bg_color: this.color,
-        font_color: this.bgColor
+        bg_color: this.bgColor,
+        font_color: this.color
       }
     )
     let container:HTMLHtmlElement = document.querySelector('.ql-container');
