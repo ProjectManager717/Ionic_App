@@ -37,23 +37,24 @@
               <ion-label>Title*</ion-label>
               <ion-input formControlName="title" type="text" ></ion-input>
             </ion-item>
-
-            <div class="quill-wrapper-div">
-              <quill-editor formControlName="content" placeholder="Content" [styles]="{height: '150px'}">
-                <div quill-editor-toolbar>
-                  <span class="ql-formats">
-                    <button class="ql-bold" [title]="'Bold'"></button>
-                    <button class="ql-underline" [title]="'Underline'"></button>
-                    <button class="ql-italic" [title]="'Italic'"></button>
-                    <select class="ql-align" [title]="'Aligment'">
-                      <option selected></option>
-                      <option value="center"></option>
-                      <option value="right"></option>
-                      <option value="justify"></option>
-                    </select>
-                  </span>
-                </div>
-              </quill-editor>
+            <div class="quill-brd" [ngClass]="{'has-error': accFrm.content.invalid && accFrm.content.dirty}">
+              <div class="quill-wrapper-div">
+                <quill-editor formControlName="content" placeholder="Content*" [styles]="{height: '150px'}">
+                  <div quill-editor-toolbar>
+                    <span class="ql-formats">
+                      <button class="ql-bold" [title]="'Bold'"></button>
+                      <button class="ql-underline" [title]="'Underline'"></button>
+                      <button class="ql-italic" [title]="'Italic'"></button>
+                      <select class="ql-align" [title]="'Aligment'">
+                        <option selected></option>
+                        <option value="center"></option>
+                        <option value="right"></option>
+                        <option value="justify"></option>
+                      </select>
+                    </span>
+                  </div>
+                </quill-editor>
+              </div>
             </div>
 
             <div class="top-mr">
@@ -112,7 +113,7 @@
 
 
             <ion-item class="pst-itm" [ngClass]="{'has-error': accFrm.author_alias.invalid && accFrm.author_alias.dirty}">
-              <ion-label>Author</ion-label>
+              <ion-label>Author*</ion-label>
               <ion-input formControlName="author_alias" type="text" ></ion-input>
             </ion-item>
 
@@ -173,7 +174,10 @@
 
           </ion-list>
         </form>
-        <ion-button (click)="creatPost()">{{ pickedPost && pickedPost.id ? 'Update Post' : 'Create Post'}}</ion-button>
+        <ion-button [disabled]="posting" (click)="creatPost()">
+          {{ pickedPost && pickedPost.id ? 'Update Post' : 'Create Post'}}
+          <ion-spinner *ngIf="posting"></ion-spinner>
+        </ion-button>
       </ion-card-content>
     </ion-card>
   </div>
