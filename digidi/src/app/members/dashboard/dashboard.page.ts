@@ -238,7 +238,7 @@ export class DashboardPage implements OnInit {
   }
 
   openWebsite(url = environment.websiteBaseUrl) {
-    this.apiService.openWebsite(url);
+    this.apiService.openLinkWithToken(url);
   }
 
   openProfileDashboard(profileSlug:string) {

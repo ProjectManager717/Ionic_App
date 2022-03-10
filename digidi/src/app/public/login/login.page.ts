@@ -86,4 +86,8 @@ export class LoginPage implements OnInit {
     this.toVerify = false;
   }
 
+  openSignUp() {
+    this.apiService.openWebsite();
+  }
+
 }

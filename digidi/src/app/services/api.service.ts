@@ -190,13 +190,27 @@ export class ApiService {
             ? path : `${environment.baseMediaPath}${type == 1 ? 'thumb/' :  'storage/'}${name}`
   }
 
-  openWebsite(url = environment.websiteBaseUrl) {
-    if(this.platForm.is('capacitor')) {
+  openWebsite(url = environment.websiteBaseUrl, inApp= true) {
+    console.log(url);
+    if(this.platForm.is('capacitor') && inApp) {
       Browser.open({ url: environment.websiteBaseUrl });
     } else {
       window.open(environment.websiteBaseUrl, '_system');
     }
-  }  
+  }
+  
+  openLinkWithToken(url, inApp=false) {
+    if(url) {
+      let prm = url.indexOf('?');
+      let newurl = url;
+      if(prm > -1) {
+        newurl = `${url}&token=${this.authService.currentUserValue.token}`
+      } else {
+        newurl = `${url}?token=${this.authService.currentUserValue.token}`
+      }
+      this.openWebsite(newurl, inApp);
+    }
+  }
 
   openCreateProfile() {
     this.openWebsite(this.createProfile);

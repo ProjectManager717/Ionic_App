@@ -61,7 +61,7 @@ export class FeedsPage implements OnInit {
       res => {
         if(res.entities && res.entities.supports) {
           if(!Object.keys(res.entities.supports).length) {
-            this.gotoProfile()
+            this.gotoInAppSearch()
           }
         }
         if(res.result && res.result.length) {
@@ -96,7 +96,11 @@ export class FeedsPage implements OnInit {
 
   openWebsite() {
     window.open(environment.websiteBaseUrl, '_system');
-  } 
+  }
+  
+  gotoInAppSearch() {
+    this.apiService.openLinkWithToken(`${environment.websiteBaseUrl}profiles`, true)
+  }
 
   gotoProfile(type = false) {
     if(type){

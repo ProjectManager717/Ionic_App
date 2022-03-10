@@ -16,8 +16,12 @@ const routes: Routes = [
     loadChildren: () => import('./feeds/feeds.module').then( m => m.FeedsPageModule) 
   },
   {
+    path: 'tabs',
+    loadChildren: () => import('./main-tabs/main-tabs.module').then( m => m.MainTabsPageModule)
+  },
+  {
     path: '',
-    redirectTo: 'feeds',
+    redirectTo: 'tabs',
     pathMatch: 'full'
   },
 ];
