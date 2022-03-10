@@ -192,7 +192,7 @@ export class ApiService {
 
   openWebsite(url = environment.websiteBaseUrl, inApp= true) {
     console.log(url);
-    if(this.platForm.is('capacitor') && inApp) {
+    if(inApp && this.platForm.is('capacitor')) {
       Browser.open({ url: environment.websiteBaseUrl });
     } else {
       window.open(environment.websiteBaseUrl, '_system');

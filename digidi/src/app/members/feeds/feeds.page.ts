@@ -99,7 +99,7 @@ export class FeedsPage implements OnInit {
   }
   
   gotoInAppSearch() {
-    this.apiService.openLinkWithToken(`${environment.websiteBaseUrl}profiles`, true)
+    this.apiService.openLinkWithToken(`${environment.websiteBaseUrl}profiles`, false)
   }
 
   gotoProfile(type = false) {
