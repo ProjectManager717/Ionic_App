@@ -191,12 +191,12 @@ export class ApiService {
   }
 
   openWebsite(url = environment.websiteBaseUrl, inApp= true) {
-    console.log(url);
     if(inApp && this.platForm.is('capacitor')) {
-      Browser.open({ url: environment.websiteBaseUrl });
+      Browser.open({ url });
     } else {
-      window.open(environment.websiteBaseUrl, '_system');
+      window.open(url, '_system');
     }
+    console.log(url);
   }
   
   openLinkWithToken(url, inApp=false) {
@@ -208,15 +208,16 @@ export class ApiService {
       } else {
         newurl = `${url}?token=${this.authService.currentUserValue.token}`
       }
+      console.log('sdd', newurl)
       this.openWebsite(newurl, inApp);
     }
   }
 
   openCreateProfile() {
-    this.openWebsite(this.createProfile);
+    this.openLinkWithToken(this.createProfile);
   }
 
   openSearch() {
-    this.openWebsite(this.searchProfile);
+    this.openLinkWithToken(this.searchProfile);
   }
 }
