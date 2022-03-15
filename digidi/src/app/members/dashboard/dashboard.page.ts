@@ -241,13 +241,17 @@ export class DashboardPage implements OnInit {
     this.apiService.openLinkWithToken(url);
   }
 
+  openProfile() {
+    this.apiService.openLinkWithToken(`${environment.websiteBaseUrl}profile`)
+  }
+
   openProfileDashboard(profileSlug:string) {
-    this.openWebsite(`${environment.websiteBaseUrl}/profile/${profileSlug}/dashboard`);
+    this.openWebsite(`${environment.websiteBaseUrl}profile/${profileSlug}/dashboard`);
   }
 
   openSupporterProfile(event: Event,profileSlug: string) {
     if(event) event.stopPropagation();
-    this.openWebsite(`${environment.websiteBaseUrl}/${profileSlug}`);
+    this.openWebsite(`${environment.websiteBaseUrl}${profileSlug}`);
   }
 
 }

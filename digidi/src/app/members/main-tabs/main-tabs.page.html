@@ -1,10 +1,15 @@
 <ion-tabs>
     <ion-tab-bar slot="bottom">
-      <ion-tab-button tab="feeds">
+      <ion-tab-button (click)="openSearchPage()">
         <ion-icon name="search-circle-outline"></ion-icon>
         <ion-label>Search</ion-label>
       </ion-tab-button>
-  
+      
+      <ion-tab-button tab="feeds">
+        <ion-icon name="newspaper-outline"></ion-icon>
+        <ion-label>Feeds</ion-label>
+      </ion-tab-button>
+
       <ion-tab-button tab="dashboard">
         <ion-icon name="person-circle-outline"></ion-icon>
         <ion-label>Account</ion-label>

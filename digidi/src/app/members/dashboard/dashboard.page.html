@@ -94,6 +94,45 @@
       </ion-card-content>
     </ion-card>
 
+    <ion-card class="profile-cards payment">
+      <ion-card-header>
+        <ion-card-title>Payment Info</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <ion-list>
+          <ng-container *ngIf="isLoading">
+            <div class="ion-text-center">
+              <ion-spinner></ion-spinner>
+            </div>
+          </ng-container>
+          <ng-container *ngIf="!isLoading && currentUser.payment_card">
+            <ion-item lines="none">
+              <ion-label class="ion-text-center">
+                {{currentUser.payment_card}}
+              </ion-label>
+            </ion-item>
+            <ion-item lines="none">
+              <ion-label class="ion-text-center">
+                <ion-button  (click)="openProfile()">Change Card</ion-button>
+              </ion-label>
+            </ion-item>
+          </ng-container>
+          <ng-container *ngIf="!isLoading && !currentUser.payment_card">
+            <ion-item lines="none">
+              <ion-label class="ion-text-center">
+                No payment method found.
+              </ion-label>
+            </ion-item>
+            <ion-item lines="none">
+              <ion-label class="ion-text-center">
+                <ion-button (click)="openProfile()">Add Card</ion-button>
+              </ion-label>
+            </ion-item>
+          </ng-container>
+        </ion-list>
+      </ion-card-content>
+    </ion-card>
+
     <ion-card class="account-cards">
       <ion-card-header>
         <ion-card-title>Account</ion-card-title>

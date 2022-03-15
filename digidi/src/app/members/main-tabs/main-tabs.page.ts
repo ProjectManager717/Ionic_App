@@ -53,4 +53,8 @@ export class MainTabsPage implements OnInit {
     )
   }
 
+  openSearchPage() {
+    this.apiService.openSearch()
+  }
+
 }
